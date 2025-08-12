@@ -1,0 +1,595 @@
+MariaDB [course_management]> show tables;
++-----------------------------+
+| Tables_in_course_management |
++-----------------------------+
+| categories                  |
+| courses                     |
+| enrollments                 |
+| instructor                  |
+| payments                    |
+| students                    |
++-----------------------------+
+6 rows in set (0.001 sec)
+
+MariaDB [course_management]> create table installments(id int auto_increment primary key,student_id int,course_id int,installment_year int,installment_month int,amount_paid decimal(10,2),payment_date date,payment_id int,created_at timestamp default current_timestamp,foreign key(student_id) references students(id),foreign key(course_id) references courses(id),foreign key(payment_id) references payments(id));
+Query OK, 0 rows affected (0.081 sec)
+
+MariaDB [course_management]> desc installments;
++-------------------+---------------+------+-----+---------------------+----------------+
+| Field             | Type          | Null | Key | Default             | Extra          |
++-------------------+---------------+------+-----+---------------------+----------------+
+| id                | int(11)       | NO   | PRI | NULL                | auto_increment |
+| student_id        | int(11)       | YES  | MUL | NULL                |                |
+| course_id         | int(11)       | YES  | MUL | NULL                |                |
+| installment_year  | int(11)       | YES  |     | NULL                |                |
+| installment_month | int(11)       | YES  |     | NULL                |                |
+| amount_paid       | decimal(10,2) | YES  |     | NULL                |                |
+| payment_date      | date          | YES  |     | NULL                |                |
+| payment_id        | int(11)       | YES  | MUL | NULL                |                |
+| created_at        | timestamp     | NO   |     | current_timestamp() |                |
++-------------------+---------------+------+-----+---------------------+----------------+
+9 rows in set (0.010 sec)
+
+MariaDB [course_management]> alter table payments add column installment_id int null,add foreign key(installment_id) references installments(id);
+Query OK, 14 rows affected (0.141 sec)
+Records: 14  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> insert into installments values(,1,1,2025,6,99,'2025-06-10',1);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '1,1,2025,6,99,'2025-06-10',1)' at line 1
+MariaDB [course_management]> select * from payments;
++----+------------+-----------+--------+----------------+----------------+----------------+---------------------+----------------+
+| id | student_id | course_id | amount | payment_method | transection_id | payment_status | created_at          | installment_id |
++----+------------+-----------+--------+----------------+----------------+----------------+---------------------+----------------+
+|  1 |          1 |         1 |  99.99 | bkash          | TXN101BX       | complete       | 2025-07-27 18:30:17 |           NULL |
+|  2 |          2 |         2 | 149.99 | rocket         | TXN102RK       | pending        | 2025-07-27 18:30:17 |           NULL |
+|  3 |          3 |         3 | 129.50 | card           | TXN103CD       | complete       | 2025-07-27 18:30:17 |           NULL |
+|  4 |          4 |         4 |  59.00 | bkash          | TXN104BX       | failed         | 2025-07-27 18:30:17 |           NULL |
+|  5 |          5 |         5 |  79.99 | card           | TXN105CD       | complete       | 2025-07-27 18:30:17 |           NULL |
+|  6 |          6 |         6 | 199.00 | rocket         | TXN106RK       | complete       | 2025-07-27 18:30:17 |           NULL |
+|  7 |          7 |         7 |  89.99 | bkash          | TXN107BX       | pending        | 2025-07-27 18:30:17 |           NULL |
+|  8 |          8 |         8 | 149.50 | card           | TXN108CD       | complete       | 2025-07-27 18:30:17 |           NULL |
+|  9 |          9 |         9 |  49.00 | rocket         | TXN109RK       | pending        | 2025-07-27 18:30:17 |           NULL |
+| 10 |         10 |        10 |  84.99 | bkash          | TXN110BX       | complete       | 2025-07-27 18:30:17 |           NULL |
+| 11 |         11 |         1 |  99.99 | card           | TXN111CD       | complete       | 2025-07-27 18:30:17 |           NULL |
+| 12 |         12 |         2 | 149.99 | bkash          | TXN112BX       | failed         | 2025-07-27 18:30:17 |           NULL |
+| 13 |         13 |         3 | 129.50 | rocket         | TXN113RK       | pending        | 2025-07-27 18:30:17 |           NULL |
+| 14 |         14 |         4 |  59.00 | card           | TXN114CD       | complete       | 2025-07-27 18:30:17 |           NULL |
++----+------------+-----------+--------+----------------+----------------+----------------+---------------------+----------------+
+14 rows in set (0.036 sec)
+
+MariaDB [course_management]> INSERT INTO installments (student_id, course_id, installment_year, installment_month, amount_paid, payment_date, payment_id)
+    -> VALUES
+    -> (1, 1, 2025, 1, 99.99, '2025-01-15', 1),
+    -> (2, 2, 2025, 2, 149.99, '2025-02-15', 2),
+    -> (1, 1, 2025, 3, 99.99, '2025-03-15', 1),
+    -> (2, 2, 2025, 4, 149.99, '2025-04-15', 2),
+    -> (1, 1, 2025, 5, 99.99, '2025-05-15', 1),
+    -> (2, 2, 2025, 6, 149.99, '2025-06-15', 2),
+    -> (1, 1, 2025, 7, 99.99, '2025-07-15', 1),
+    -> (2, 2, 2025, 8, 149.99, '2025-08-15', 2),
+    -> (1, 1, 2025, 9, 99.99, '2025-09-15', 1),
+    -> (2, 2, 2025, 10, 149.99, '2025-10-15', 2);
+Query OK, 10 rows affected (0.020 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> select * from installments;
++----+------------+-----------+------------------+-------------------+-------------+--------------+------------+---------------------+
+| id | student_id | course_id | installment_year | installment_month | amount_paid | payment_date | payment_id | created_at          |
++----+------------+-----------+------------------+-------------------+-------------+--------------+------------+---------------------+
+|  1 |          1 |         1 |             2025 |                 1 |       99.99 | 2025-01-15   |          1 | 2025-07-28 16:02:27 |
+|  2 |          2 |         2 |             2025 |                 2 |      149.99 | 2025-02-15   |          2 | 2025-07-28 16:02:27 |
+|  3 |          1 |         1 |             2025 |                 3 |       99.99 | 2025-03-15   |          1 | 2025-07-28 16:02:27 |
+|  4 |          2 |         2 |             2025 |                 4 |      149.99 | 2025-04-15   |          2 | 2025-07-28 16:02:27 |
+|  5 |          1 |         1 |             2025 |                 5 |       99.99 | 2025-05-15   |          1 | 2025-07-28 16:02:27 |
+|  6 |          2 |         2 |             2025 |                 6 |      149.99 | 2025-06-15   |          2 | 2025-07-28 16:02:27 |
+|  7 |          1 |         1 |             2025 |                 7 |       99.99 | 2025-07-15   |          1 | 2025-07-28 16:02:27 |
+|  8 |          2 |         2 |             2025 |                 8 |      149.99 | 2025-08-15   |          2 | 2025-07-28 16:02:27 |
+|  9 |          1 |         1 |             2025 |                 9 |       99.99 | 2025-09-15   |          1 | 2025-07-28 16:02:27 |
+| 10 |          2 |         2 |             2025 |                10 |      149.99 | 2025-10-15   |          2 | 2025-07-28 16:02:27 |
++----+------------+-----------+------------------+-------------------+-------------+--------------+------------+---------------------+
+10 rows in set (0.000 sec)
+
+MariaDB [course_management]> delete from installments;
+Query OK, 10 rows affected (0.007 sec)
+
+MariaDB [course_management]> desc installments;
++-------------------+---------------+------+-----+---------------------+----------------+
+| Field             | Type          | Null | Key | Default             | Extra          |
++-------------------+---------------+------+-----+---------------------+----------------+
+| id                | int(11)       | NO   | PRI | NULL                | auto_increment |
+| student_id        | int(11)       | YES  | MUL | NULL                |                |
+| course_id         | int(11)       | YES  | MUL | NULL                |                |
+| installment_year  | int(11)       | YES  |     | NULL                |                |
+| installment_month | int(11)       | YES  |     | NULL                |                |
+| amount_paid       | decimal(10,2) | YES  |     | NULL                |                |
+| payment_date      | date          | YES  |     | NULL                |                |
+| payment_id        | int(11)       | YES  | MUL | NULL                |                |
+| created_at        | timestamp     | NO   |     | current_timestamp() |                |
++-------------------+---------------+------+-----+---------------------+----------------+
+9 rows in set (0.012 sec)
+
+MariaDB [course_management]> INSERT INTO installments (student_id, course_id, installment_year, installment_month, amount_paid, payment_date, payment_id)
+    -> VALUES
+    -> (1, 1, 2025, 1, 99.99, '2025-01-10', 1),
+    -> (2, 2, 2025, 2, 149.99, '2025-02-10', 2),
+    -> (3, 3, 2025, 3, 129.50, '2025-03-10', 3),
+    -> (4, 4, 2025, 4, 59.00, '2025-04-10', 4),
+    -> (5, 5, 2025, 5, 79.99, '2025-05-10', 5),
+    -> (6, 6, 2025, 6, 199.00, '2025-06-10', 6),
+    -> (7, 7, 2025, 7, 89.99, '2025-07-10', 7),
+    -> (8, 8, 2025, 8, 149.50, '2025-08-10', 8),
+    -> (9, 9, 2025, 9, 49.00, '2025-09-10', 9),
+    -> (10, 10, 2025, 10, 84.99, '2025-10-10', 10),
+    -> (11, 1, 2025, 11, 99.99, '2025-11-10', 11),
+    -> (12, 2, 2025, 12, 149.99, '2025-12-10', 12),
+    -> (13, 3, 2025, 1, 129.50, '2025-01-20', 13),
+    -> (14, 4, 2025, 2, 59.00, '2025-02-20', 14);
+Query OK, 14 rows affected (0.027 sec)
+Records: 14  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> select * from installments;
++----+------------+-----------+------------------+-------------------+-------------+--------------+------------+---------------------+
+| id | student_id | course_id | installment_year | installment_month | amount_paid | payment_date | payment_id | created_at          |
++----+------------+-----------+------------------+-------------------+-------------+--------------+------------+---------------------+
+| 11 |          1 |         1 |             2025 |                 1 |       99.99 | 2025-01-10   |          1 | 2025-07-28 16:05:17 |
+| 12 |          2 |         2 |             2025 |                 2 |      149.99 | 2025-02-10   |          2 | 2025-07-28 16:05:17 |
+| 13 |          3 |         3 |             2025 |                 3 |      129.50 | 2025-03-10   |          3 | 2025-07-28 16:05:17 |
+| 14 |          4 |         4 |             2025 |                 4 |       59.00 | 2025-04-10   |          4 | 2025-07-28 16:05:17 |
+| 15 |          5 |         5 |             2025 |                 5 |       79.99 | 2025-05-10   |          5 | 2025-07-28 16:05:17 |
+| 16 |          6 |         6 |             2025 |                 6 |      199.00 | 2025-06-10   |          6 | 2025-07-28 16:05:17 |
+| 17 |          7 |         7 |             2025 |                 7 |       89.99 | 2025-07-10   |          7 | 2025-07-28 16:05:17 |
+| 18 |          8 |         8 |             2025 |                 8 |      149.50 | 2025-08-10   |          8 | 2025-07-28 16:05:17 |
+| 19 |          9 |         9 |             2025 |                 9 |       49.00 | 2025-09-10   |          9 | 2025-07-28 16:05:17 |
+| 20 |         10 |        10 |             2025 |                10 |       84.99 | 2025-10-10   |         10 | 2025-07-28 16:05:17 |
+| 21 |         11 |         1 |             2025 |                11 |       99.99 | 2025-11-10   |         11 | 2025-07-28 16:05:17 |
+| 22 |         12 |         2 |             2025 |                12 |      149.99 | 2025-12-10   |         12 | 2025-07-28 16:05:17 |
+| 23 |         13 |         3 |             2025 |                 1 |      129.50 | 2025-01-20   |         13 | 2025-07-28 16:05:17 |
+| 24 |         14 |         4 |             2025 |                 2 |       59.00 | 2025-02-20   |         14 | 2025-07-28 16:05:17 |
++----+------------+-----------+------------------+-------------------+-------------+--------------+------------+---------------------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> ALTER TABLE installments AUTO_INCREMENT = 1;
+Query OK, 0 rows affected (0.016 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> select * from installments;
++----+------------+-----------+------------------+-------------------+-------------+--------------+------------+---------------------+
+| id | student_id | course_id | installment_year | installment_month | amount_paid | payment_date | payment_id | created_at          |
++----+------------+-----------+------------------+-------------------+-------------+--------------+------------+---------------------+
+| 11 |          1 |         1 |             2025 |                 1 |       99.99 | 2025-01-10   |          1 | 2025-07-28 16:05:17 |
+| 12 |          2 |         2 |             2025 |                 2 |      149.99 | 2025-02-10   |          2 | 2025-07-28 16:05:17 |
+| 13 |          3 |         3 |             2025 |                 3 |      129.50 | 2025-03-10   |          3 | 2025-07-28 16:05:17 |
+| 14 |          4 |         4 |             2025 |                 4 |       59.00 | 2025-04-10   |          4 | 2025-07-28 16:05:17 |
+| 15 |          5 |         5 |             2025 |                 5 |       79.99 | 2025-05-10   |          5 | 2025-07-28 16:05:17 |
+| 16 |          6 |         6 |             2025 |                 6 |      199.00 | 2025-06-10   |          6 | 2025-07-28 16:05:17 |
+| 17 |          7 |         7 |             2025 |                 7 |       89.99 | 2025-07-10   |          7 | 2025-07-28 16:05:17 |
+| 18 |          8 |         8 |             2025 |                 8 |      149.50 | 2025-08-10   |          8 | 2025-07-28 16:05:17 |
+| 19 |          9 |         9 |             2025 |                 9 |       49.00 | 2025-09-10   |          9 | 2025-07-28 16:05:17 |
+| 20 |         10 |        10 |             2025 |                10 |       84.99 | 2025-10-10   |         10 | 2025-07-28 16:05:17 |
+| 21 |         11 |         1 |             2025 |                11 |       99.99 | 2025-11-10   |         11 | 2025-07-28 16:05:17 |
+| 22 |         12 |         2 |             2025 |                12 |      149.99 | 2025-12-10   |         12 | 2025-07-28 16:05:17 |
+| 23 |         13 |         3 |             2025 |                 1 |      129.50 | 2025-01-20   |         13 | 2025-07-28 16:05:17 |
+| 24 |         14 |         4 |             2025 |                 2 |       59.00 | 2025-02-20   |         14 | 2025-07-28 16:05:17 |
++----+------------+-----------+------------------+-------------------+-------------+--------------+------------+---------------------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> delete from installments;
+Query OK, 14 rows affected (0.018 sec)
+
+MariaDB [course_management]> ALTER TABLE installments AUTO_INCREMENT = 1;
+Query OK, 0 rows affected (0.010 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> INSERT INTO installments (student_id, course_id, installment_year, installment_month, amount_paid, payment_date, payment_id)
+    -> VALUES
+    -> (1, 1, 2025, 1, 99.99, '2025-01-10', 1),
+    -> (2, 2, 2025, 2, 149.99, '2025-02-10', 2),
+    -> (3, 3, 2025, 3, 129.50, '2025-03-10', 3),
+    -> (4, 4, 2025, 4, 59.00, '2025-04-10', 4),
+    -> (5, 5, 2025, 5, 79.99, '2025-05-10', 5),
+    -> (6, 6, 2025, 6, 199.00, '2025-06-10', 6),
+    -> (7, 7, 2025, 7, 89.99, '2025-07-10', 7),
+    -> (8, 8, 2025, 8, 149.50, '2025-08-10', 8),
+    -> (9, 9, 2025, 9, 49.00, '2025-09-10', 9),
+    -> (10, 10, 2025, 10, 84.99, '2025-10-10', 10),
+    -> (11, 1, 2025, 11, 99.99, '2025-11-10', 11),
+    -> (12, 2, 2025, 12, 149.99, '2025-12-10', 12),
+    -> (13, 3, 2025, 1, 129.50, '2025-01-20', 13),
+    -> (14, 4, 2025, 2, 59.00, '2025-02-20', 14);
+Query OK, 14 rows affected (0.017 sec)
+Records: 14  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> select * from installments;
++----+------------+-----------+------------------+-------------------+-------------+--------------+------------+---------------------+
+| id | student_id | course_id | installment_year | installment_month | amount_paid | payment_date | payment_id | created_at          |
++----+------------+-----------+------------------+-------------------+-------------+--------------+------------+---------------------+
+|  1 |          1 |         1 |             2025 |                 1 |       99.99 | 2025-01-10   |          1 | 2025-07-28 16:08:11 |
+|  2 |          2 |         2 |             2025 |                 2 |      149.99 | 2025-02-10   |          2 | 2025-07-28 16:08:11 |
+|  3 |          3 |         3 |             2025 |                 3 |      129.50 | 2025-03-10   |          3 | 2025-07-28 16:08:11 |
+|  4 |          4 |         4 |             2025 |                 4 |       59.00 | 2025-04-10   |          4 | 2025-07-28 16:08:11 |
+|  5 |          5 |         5 |             2025 |                 5 |       79.99 | 2025-05-10   |          5 | 2025-07-28 16:08:11 |
+|  6 |          6 |         6 |             2025 |                 6 |      199.00 | 2025-06-10   |          6 | 2025-07-28 16:08:11 |
+|  7 |          7 |         7 |             2025 |                 7 |       89.99 | 2025-07-10   |          7 | 2025-07-28 16:08:11 |
+|  8 |          8 |         8 |             2025 |                 8 |      149.50 | 2025-08-10   |          8 | 2025-07-28 16:08:11 |
+|  9 |          9 |         9 |             2025 |                 9 |       49.00 | 2025-09-10   |          9 | 2025-07-28 16:08:11 |
+| 10 |         10 |        10 |             2025 |                10 |       84.99 | 2025-10-10   |         10 | 2025-07-28 16:08:11 |
+| 11 |         11 |         1 |             2025 |                11 |       99.99 | 2025-11-10   |         11 | 2025-07-28 16:08:11 |
+| 12 |         12 |         2 |             2025 |                12 |      149.99 | 2025-12-10   |         12 | 2025-07-28 16:08:11 |
+| 13 |         13 |         3 |             2025 |                 1 |      129.50 | 2025-01-20   |         13 | 2025-07-28 16:08:11 |
+| 14 |         14 |         4 |             2025 |                 2 |       59.00 | 2025-02-20   |         14 | 2025-07-28 16:08:11 |
++----+------------+-----------+------------------+-------------------+-------------+--------------+------------+---------------------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> create table dues(id int auto_increment primary key,student_id int,course_id int,due_month int,due_amount decimal(10,2),is_cleared boolean default 0,cleared_on date default null,installment_id int default null,created_at timestamp default current_timestamp,foreign key(student_id) references students(id),foreign key(course_id) references courses(id),foreign key(installment_id) references installments(id));
+Query OK, 0 rows affected (0.049 sec)
+
+MariaDB [course_management]> desc dues;
++----------------+---------------+------+-----+---------------------+----------------+
+| Field          | Type          | Null | Key | Default             | Extra          |
++----------------+---------------+------+-----+---------------------+----------------+
+| id             | int(11)       | NO   | PRI | NULL                | auto_increment |
+| student_id     | int(11)       | YES  | MUL | NULL                |                |
+| course_id      | int(11)       | YES  | MUL | NULL                |                |
+| due_month      | int(11)       | YES  |     | NULL                |                |
+| due_amount     | decimal(10,2) | YES  |     | NULL                |                |
+| is_cleared     | tinyint(1)    | YES  |     | 0                   |                |
+| cleared_on     | date          | YES  |     | NULL                |                |
+| installment_id | int(11)       | YES  | MUL | NULL                |                |
+| created_at     | timestamp     | NO   |     | current_timestamp() |                |
++----------------+---------------+------+-----+---------------------+----------------+
+9 rows in set (0.010 sec)
+
+MariaDB [course_management]> INSERT INTO dues (student_id, course_id, due_month, due_amount, is_cleared, cleared_on, installment_id)
+    -> VALUES
+    -> (1, 1, 1, 99.99, 1, '2025-07-27', NULL),
+    -> (2, 2, 2, 149.99, 0, NULL, NULL),
+    -> (3, 3, 3, 129.50, 1, '2025-07-27', NULL),
+    -> (4, 4, 4, 59.00, 0, NULL, NULL),
+    -> (5, 5, 5, 79.99, 1, '2025-07-27', NULL),
+    -> (6, 6, 6, 199.00, 1, '2025-07-27', NULL),
+    -> (7, 7, 7, 89.99, 0, NULL, NULL),
+    -> (8, 8, 8, 149.50, 1, '2025-07-27', NULL),
+    -> (9, 9, 9, 49.00, 0, NULL, NULL),
+    -> (10, 10, 10, 84.99, 1, '2025-07-27', NULL),
+    -> (11, 1, 11, 99.99, 1, '2025-07-27', NULL),
+    -> (12, 2, 12, 149.99, 0, NULL, NULL),
+    -> (13, 3, 13, 129.50, 0, NULL, NULL),
+    -> (14, 4, 14, 59.00, 1, '2025-07-27', NULL);
+Query OK, 14 rows affected (0.016 sec)
+Records: 14  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> select *from dues;
++----+------------+-----------+-----------+------------+------------+------------+----------------+---------------------+
+| id | student_id | course_id | due_month | due_amount | is_cleared | cleared_on | installment_id | created_at          |
++----+------------+-----------+-----------+------------+------------+------------+----------------+---------------------+
+|  1 |          1 |         1 |         1 |      99.99 |          1 | 2025-07-27 |           NULL | 2025-07-28 16:22:07 |
+|  2 |          2 |         2 |         2 |     149.99 |          0 | NULL       |           NULL | 2025-07-28 16:22:07 |
+|  3 |          3 |         3 |         3 |     129.50 |          1 | 2025-07-27 |           NULL | 2025-07-28 16:22:07 |
+|  4 |          4 |         4 |         4 |      59.00 |          0 | NULL       |           NULL | 2025-07-28 16:22:07 |
+|  5 |          5 |         5 |         5 |      79.99 |          1 | 2025-07-27 |           NULL | 2025-07-28 16:22:07 |
+|  6 |          6 |         6 |         6 |     199.00 |          1 | 2025-07-27 |           NULL | 2025-07-28 16:22:07 |
+|  7 |          7 |         7 |         7 |      89.99 |          0 | NULL       |           NULL | 2025-07-28 16:22:07 |
+|  8 |          8 |         8 |         8 |     149.50 |          1 | 2025-07-27 |           NULL | 2025-07-28 16:22:07 |
+|  9 |          9 |         9 |         9 |      49.00 |          0 | NULL       |           NULL | 2025-07-28 16:22:07 |
+| 10 |         10 |        10 |        10 |      84.99 |          1 | 2025-07-27 |           NULL | 2025-07-28 16:22:07 |
+| 11 |         11 |         1 |        11 |      99.99 |          1 | 2025-07-27 |           NULL | 2025-07-28 16:22:07 |
+| 12 |         12 |         2 |        12 |     149.99 |          0 | NULL       |           NULL | 2025-07-28 16:22:07 |
+| 13 |         13 |         3 |        13 |     129.50 |          0 | NULL       |           NULL | 2025-07-28 16:22:07 |
+| 14 |         14 |         4 |        14 |      59.00 |          1 | 2025-07-27 |           NULL | 2025-07-28 16:22:07 |
++----+------------+-----------+-----------+------------+------------+------------+----------------+---------------------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> truncate from dues;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'from dues' at line 1
+MariaDB [course_management]> TRUNCATE TABLE dues;
+Query OK, 0 rows affected (0.103 sec)
+
+MariaDB [course_management]> select *from dues;
+Empty set (0.000 sec)
+
+MariaDB [course_management]> INSERT INTO dues (student_id, course_id, due_month, due_amount, is_cleared, cleared_on, installment_id)
+    -> VALUES
+    -> (1, 1, 1, 99.99, 1, '2025-07-27', 1),
+    -> (2, 2, 2, 149.99, 0, NULL, 2),
+    -> (3, 3, 3, 129.50, 1, '2025-07-27', 3),
+    -> (4, 4, 4, 59.00, 0, NULL, 4),
+    -> (5, 5, 5, 79.99, 1, '2025-07-27', 5),
+    -> (6, 6, 6, 199.00, 1, '2025-07-27', 6),
+    -> (7, 7, 7, 89.99, 0, NULL, 7),
+    -> (8, 8, 8, 149.50, 1, '2025-07-27', 8),
+    -> (9, 9, 9, 49.00, 0, NULL, 9),
+    -> (10, 10, 10, 84.99, 1, '2025-07-27', 10),
+    -> (11, 1, 11, 99.99, 1, '2025-07-27', 11),
+    -> (12, 2, 12, 149.99, 0, NULL, 12),
+    -> (13, 3, 13, 129.50, 0, NULL, 13),
+    -> (14, 4, 14, 59.00, 1, '2025-07-27', 14);
+Query OK, 14 rows affected (0.018 sec)
+Records: 14  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> select *from dues;
++----+------------+-----------+-----------+------------+------------+------------+----------------+---------------------+
+| id | student_id | course_id | due_month | due_amount | is_cleared | cleared_on | installment_id | created_at          |
++----+------------+-----------+-----------+------------+------------+------------+----------------+---------------------+
+|  1 |          1 |         1 |         1 |      99.99 |          1 | 2025-07-27 |              1 | 2025-07-28 16:25:05 |
+|  2 |          2 |         2 |         2 |     149.99 |          0 | NULL       |              2 | 2025-07-28 16:25:05 |
+|  3 |          3 |         3 |         3 |     129.50 |          1 | 2025-07-27 |              3 | 2025-07-28 16:25:05 |
+|  4 |          4 |         4 |         4 |      59.00 |          0 | NULL       |              4 | 2025-07-28 16:25:05 |
+|  5 |          5 |         5 |         5 |      79.99 |          1 | 2025-07-27 |              5 | 2025-07-28 16:25:05 |
+|  6 |          6 |         6 |         6 |     199.00 |          1 | 2025-07-27 |              6 | 2025-07-28 16:25:05 |
+|  7 |          7 |         7 |         7 |      89.99 |          0 | NULL       |              7 | 2025-07-28 16:25:05 |
+|  8 |          8 |         8 |         8 |     149.50 |          1 | 2025-07-27 |              8 | 2025-07-28 16:25:05 |
+|  9 |          9 |         9 |         9 |      49.00 |          0 | NULL       |              9 | 2025-07-28 16:25:05 |
+| 10 |         10 |        10 |        10 |      84.99 |          1 | 2025-07-27 |             10 | 2025-07-28 16:25:05 |
+| 11 |         11 |         1 |        11 |      99.99 |          1 | 2025-07-27 |             11 | 2025-07-28 16:25:05 |
+| 12 |         12 |         2 |        12 |     149.99 |          0 | NULL       |             12 | 2025-07-28 16:25:05 |
+| 13 |         13 |         3 |        13 |     129.50 |          0 | NULL       |             13 | 2025-07-28 16:25:05 |
+| 14 |         14 |         4 |        14 |      59.00 |          1 | 2025-07-27 |             14 | 2025-07-28 16:25:05 |
++----+------------+-----------+-----------+------------+------------+------------+----------------+---------------------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> alter table payments add column payment_date date afer payment_status;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'payment_status' at line 1
+MariaDB [course_management]> alter table payments add column payment_date date after payment_status;
+Query OK, 0 rows affected (0.016 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> update paments set payment_date =2025-04-5 where id=1;
+ERROR 1146 (42S02): Table 'course_management.paments' doesn't exist
+MariaDB [course_management]> update paments set payment_date ='2025-04-5' where id=1;
+ERROR 1146 (42S02): Table 'course_management.paments' doesn't exist
+MariaDB [course_management]> UPDATE payments
+    -> SET payment_date = '2025-04-05'
+    -> WHERE id = 1;
+Query OK, 1 row affected (0.006 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [course_management]> UPDATE payments
+    -> SET payment_date = '2025-04-07' WHERE id = 2; 
+Query OK, 1 row affected (0.005 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [course_management]> select * from payments;
++----+------------+-----------+--------+----------------+----------------+----------------+--------------+---------------------+----------------+
+| id | student_id | course_id | amount | payment_method | transection_id | payment_status | payment_date | created_at          | installment_id |
++----+------------+-----------+--------+----------------+----------------+----------------+--------------+---------------------+----------------+
+|  1 |          1 |         1 |  99.99 | bkash          | TXN101BX       | complete       | 2025-04-05   | 2025-07-27 18:30:17 |           NULL |
+|  2 |          2 |         2 | 149.99 | rocket         | TXN102RK       | pending        | 2025-04-07   | 2025-07-27 18:30:17 |           NULL |
+|  3 |          3 |         3 | 129.50 | card           | TXN103CD       | complete       | NULL         | 2025-07-27 18:30:17 |           NULL |
+|  4 |          4 |         4 |  59.00 | bkash          | TXN104BX       | failed         | NULL         | 2025-07-27 18:30:17 |           NULL |
+|  5 |          5 |         5 |  79.99 | card           | TXN105CD       | complete       | NULL         | 2025-07-27 18:30:17 |           NULL |
+|  6 |          6 |         6 | 199.00 | rocket         | TXN106RK       | complete       | NULL         | 2025-07-27 18:30:17 |           NULL |
+|  7 |          7 |         7 |  89.99 | bkash          | TXN107BX       | pending        | NULL         | 2025-07-27 18:30:17 |           NULL |
+|  8 |          8 |         8 | 149.50 | card           | TXN108CD       | complete       | NULL         | 2025-07-27 18:30:17 |           NULL |
+|  9 |          9 |         9 |  49.00 | rocket         | TXN109RK       | pending        | NULL         | 2025-07-27 18:30:17 |           NULL |
+| 10 |         10 |        10 |  84.99 | bkash          | TXN110BX       | complete       | NULL         | 2025-07-27 18:30:17 |           NULL |
+| 11 |         11 |         1 |  99.99 | card           | TXN111CD       | complete       | NULL         | 2025-07-27 18:30:17 |           NULL |
+| 12 |         12 |         2 | 149.99 | bkash          | TXN112BX       | failed         | NULL         | 2025-07-27 18:30:17 |           NULL |
+| 13 |         13 |         3 | 129.50 | rocket         | TXN113RK       | pending        | NULL         | 2025-07-27 18:30:17 |           NULL |
+| 14 |         14 |         4 |  59.00 | card           | TXN114CD       | complete       | NULL         | 2025-07-27 18:30:17 |           NULL |
++----+------------+-----------+--------+----------------+----------------+----------------+--------------+---------------------+----------------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> select s.name,p.amount,p.payment_date from students s inner join payments p on s.id=p.student_id;
++-----------------+--------+--------------+
+| name            | amount | payment_date |
++-----------------+--------+--------------+
+| Abrar           |  99.99 | 2025-04-05   |
+| Asif            | 149.99 | 2025-04-07   |
+| Nafiz           | 129.50 | NULL         |
+| Mahfuz          |  59.00 | NULL         |
+| Jon Doe         |  79.99 | NULL         |
+| Jane Smith      | 199.00 | NULL         |
+| Mike Ross       |  89.99 | NULL         |
+| Rachel Zane     | 149.50 | NULL         |
+| Harvey Specter  |  49.00 | NULL         |
+| Donna Paulsen   |  84.99 | NULL         |
+| Louis Litt      |  99.99 | NULL         |
+| Jessica Pearson | 149.99 | NULL         |
+| Sheila Sazs     | 129.50 | NULL         |
+| Katrina Bennett |  59.00 | NULL         |
++-----------------+--------+--------------+
+14 rows in set (0.003 sec)
+
+MariaDB [course_management]> select s.name,p.amount,p.payment_date,p.payment_status from students s left join payments p on s.id=p.student_id and payment_status='completed';
++-----------------+--------+--------------+----------------+
+| name            | amount | payment_date | payment_status |
++-----------------+--------+--------------+----------------+
+| Abrar           |   NULL | NULL         | NULL           |
+| Asif            |   NULL | NULL         | NULL           |
+| Nafiz           |   NULL | NULL         | NULL           |
+| Mahfuz          |   NULL | NULL         | NULL           |
+| Jon Doe         |   NULL | NULL         | NULL           |
+| Jane Smith      |   NULL | NULL         | NULL           |
+| Mike Ross       |   NULL | NULL         | NULL           |
+| Rachel Zane     |   NULL | NULL         | NULL           |
+| Harvey Specter  |   NULL | NULL         | NULL           |
+| Donna Paulsen   |   NULL | NULL         | NULL           |
+| Louis Litt      |   NULL | NULL         | NULL           |
+| Jessica Pearson |   NULL | NULL         | NULL           |
+| Sheila Sazs     |   NULL | NULL         | NULL           |
+| Katrina Bennett |   NULL | NULL         | NULL           |
++-----------------+--------+--------------+----------------+
+14 rows in set (0.001 sec)
+
+MariaDB [course_management]> select s.name,p.amount,p.payment_date,p.payment_status from students s left join payments p on s.id=p.student_id and payment_status='complete';
++-----------------+--------+--------------+----------------+
+| name            | amount | payment_date | payment_status |
++-----------------+--------+--------------+----------------+
+| Abrar           |  99.99 | 2025-04-05   | complete       |
+| Asif            |   NULL | NULL         | NULL           |
+| Nafiz           | 129.50 | NULL         | complete       |
+| Mahfuz          |   NULL | NULL         | NULL           |
+| Jon Doe         |  79.99 | NULL         | complete       |
+| Jane Smith      | 199.00 | NULL         | complete       |
+| Mike Ross       |   NULL | NULL         | NULL           |
+| Rachel Zane     | 149.50 | NULL         | complete       |
+| Harvey Specter  |   NULL | NULL         | NULL           |
+| Donna Paulsen   |  84.99 | NULL         | complete       |
+| Louis Litt      |  99.99 | NULL         | complete       |
+| Jessica Pearson |   NULL | NULL         | NULL           |
+| Sheila Sazs     |   NULL | NULL         | NULL           |
+| Katrina Bennett |  59.00 | NULL         | complete       |
++-----------------+--------+--------------+----------------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> select s.name,p.amount,p.payment_date,p.payment_status from students s inner join payments p on s.id=p.student_id and payment_status='complete';
++-----------------+--------+--------------+----------------+
+| name            | amount | payment_date | payment_status |
++-----------------+--------+--------------+----------------+
+| Abrar           |  99.99 | 2025-04-05   | complete       |
+| Nafiz           | 129.50 | NULL         | complete       |
+| Jon Doe         |  79.99 | NULL         | complete       |
+| Jane Smith      | 199.00 | NULL         | complete       |
+| Rachel Zane     | 149.50 | NULL         | complete       |
+| Donna Paulsen   |  84.99 | NULL         | complete       |
+| Louis Litt      |  99.99 | NULL         | complete       |
+| Katrina Bennett |  59.00 | NULL         | complete       |
++-----------------+--------+--------------+----------------+
+8 rows in set (0.000 sec)
+
+MariaDB [course_management]> select s.name,p.amount,p.payment_date,p.payment_status from students s right join payments p on s.id=p.student_id and payment_status='complete';
++-----------------+--------+--------------+----------------+
+| name            | amount | payment_date | payment_status |
++-----------------+--------+--------------+----------------+
+| Abrar           |  99.99 | 2025-04-05   | complete       |
+| NULL            | 149.99 | 2025-04-07   | pending        |
+| Nafiz           | 129.50 | NULL         | complete       |
+| NULL            |  59.00 | NULL         | failed         |
+| Jon Doe         |  79.99 | NULL         | complete       |
+| Jane Smith      | 199.00 | NULL         | complete       |
+| NULL            |  89.99 | NULL         | pending        |
+| Rachel Zane     | 149.50 | NULL         | complete       |
+| NULL            |  49.00 | NULL         | pending        |
+| Donna Paulsen   |  84.99 | NULL         | complete       |
+| Louis Litt      |  99.99 | NULL         | complete       |
+| NULL            | 149.99 | NULL         | failed         |
+| NULL            | 129.50 | NULL         | pending        |
+| Katrina Bennett |  59.00 | NULL         | complete       |
++-----------------+--------+--------------+----------------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> select student_id,sum(amount) as total_pament from payments group by student_id;
++------------+--------------+
+| student_id | total_pament |
++------------+--------------+
+|          1 |        99.99 |
+|          2 |       149.99 |
+|          3 |       129.50 |
+|          4 |        59.00 |
+|          5 |        79.99 |
+|          6 |       199.00 |
+|          7 |        89.99 |
+|          8 |       149.50 |
+|          9 |        49.00 |
+|         10 |        84.99 |
+|         11 |        99.99 |
+|         12 |       149.99 |
+|         13 |       129.50 |
+|         14 |        59.00 |
++------------+--------------+
+14 rows in set (0.001 sec)
+
+MariaDB [course_management]> select course_id,count(*) as total_students from enrollments group by course_id;
++-----------+----------------+
+| course_id | total_students |
++-----------+----------------+
+|         1 |              3 |
+|         2 |              3 |
+|         3 |              2 |
+|         4 |              2 |
+|         5 |              3 |
+|         6 |              2 |
+|         7 |              2 |
+|         8 |              1 |
+|         9 |              1 |
+|        10 |              1 |
++-----------+----------------+
+10 rows in set (0.003 sec)
+
+MariaDB [course_management]> select c.id,c.name,e.course_id count(*) as total_students from courses c join enrollments e on c.id=e.course_id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'count(*) as total_students from courses c join enrollments e on c.id=e.course_id' at line 1
+MariaDB [course_management]> SELECT 
+    ->   c.id,
+    ->   c.name,
+    ->   e.course_id,
+    ->   COUNT(*) AS total_students
+    -> FROM courses c
+    -> JOIN enrollments e ON c.id = e.course_id
+    -> GROUP BY c.id, c.name, e.course_id;
+ERROR 1054 (42S22): Unknown column 'c.name' in 'field list'
+MariaDB [course_management]> SELECT 
+    ->   c.id,
+    ->   c.name,
+    ->   e.course_id,
+    ->   COUNT(*) AS total_students
+    -> FROM courses c
+    -> JOIN enrollments e ON c.id = e.course_id
+    -> GROUP BY c.id ;
+ERROR 1054 (42S22): Unknown column 'c.name' in 'field list'
+MariaDB [course_management]> SELECT 
+    ->   c.id,
+    ->   c.title,   e.course_id,
+    ->   COUNT(*) AS total_students
+    -> FROM courses c
+    -> JOIN enrollments e ON c.id = e.course_id
+    -> GROUP BY c.id ; 
++----+--------------------------+-----------+----------------+
+| id | title                    | course_id | total_students |
++----+--------------------------+-----------+----------------+
+|  1 | Python Programming       |         1 |              3 |
+|  2 | Digital Marketing Basics |         2 |              3 |
+|  3 | Graphic Design Mastery   |         3 |              2 |
+|  4 | Beginner Yoga Course     |         4 |              2 |
+|  5 | Spanish for Beginners    |         5 |              3 |
+|  6 | Full Stack Web Dev       |         6 |              2 |
+|  7 | Entrepreneurship 101     |         7 |              2 |
+|  8 | Advanced Photoshop       |         8 |              1 |
+|  9 | Mindfulness Meditation   |         9 |              1 |
+| 10 | French Language Basics   |        10 |              1 |
++----+--------------------------+-----------+----------------+
+10 rows in set (0.000 sec)
+
+MariaDB [course_management]> select c.title as course_title,sum(p.amount) as total_payment from payments p join courses c on p.course_id=c.id where month(p.payment_date)=month(current_date - interval 1 month) and year(p.payment_date)=year(current_date - interval 1 month);
++--------------+---------------+
+| course_title | total_payment |
++--------------+---------------+
+| NULL         |          NULL |
++--------------+---------------+
+1 row in set (0.001 sec)
+
+MariaDB [course_management]> select c.title as course_title,sum(p.amount) as total_payment from payments p join courses c on p.course_id=c.id where month(p.payment_date)=month(current_date - interval 1 month) and year(p.payment_date)=year(current_date - interval 1 month) group by c.id,c.title order by total_pament desc;
+ERROR 1054 (42S22): Unknown column 'total_pament' in 'order clause'
+MariaDB [course_management]> select c.title as course_title,sum(p.amount) as total_payment from payments p join courses c on p.course_id=c.id where month(p.payment_date)=month(current_date - interval 1 month) and year(p.payment_date)=year(current_date - interval 1 month) group by c.id,c.title order by total_payment desc;
+Empty set (0.000 sec)
+
+MariaDB [course_management]> select * from payments;
++----+------------+-----------+--------+----------------+----------------+----------------+--------------+---------------------+----------------+
+| id | student_id | course_id | amount | payment_method | transection_id | payment_status | payment_date | created_at          | installment_id |
++----+------------+-----------+--------+----------------+----------------+----------------+--------------+---------------------+----------------+
+|  1 |          1 |         1 |  99.99 | bkash          | TXN101BX       | complete       | 2025-04-05   | 2025-07-27 18:30:17 |           NULL |
+|  2 |          2 |         2 | 149.99 | rocket         | TXN102RK       | pending        | 2025-04-07   | 2025-07-27 18:30:17 |           NULL |
+|  3 |          3 |         3 | 129.50 | card           | TXN103CD       | complete       | NULL         | 2025-07-27 18:30:17 |           NULL |
+|  4 |          4 |         4 |  59.00 | bkash          | TXN104BX       | failed         | NULL         | 2025-07-27 18:30:17 |           NULL |
+|  5 |          5 |         5 |  79.99 | card           | TXN105CD       | complete       | NULL         | 2025-07-27 18:30:17 |           NULL |
+|  6 |          6 |         6 | 199.00 | rocket         | TXN106RK       | complete       | NULL         | 2025-07-27 18:30:17 |           NULL |
+|  7 |          7 |         7 |  89.99 | bkash          | TXN107BX       | pending        | NULL         | 2025-07-27 18:30:17 |           NULL |
+|  8 |          8 |         8 | 149.50 | card           | TXN108CD       | complete       | NULL         | 2025-07-27 18:30:17 |           NULL |
+|  9 |          9 |         9 |  49.00 | rocket         | TXN109RK       | pending        | NULL         | 2025-07-27 18:30:17 |           NULL |
+| 10 |         10 |        10 |  84.99 | bkash          | TXN110BX       | complete       | NULL         | 2025-07-27 18:30:17 |           NULL |
+| 11 |         11 |         1 |  99.99 | card           | TXN111CD       | complete       | NULL         | 2025-07-27 18:30:17 |           NULL |
+| 12 |         12 |         2 | 149.99 | bkash          | TXN112BX       | failed         | NULL         | 2025-07-27 18:30:17 |           NULL |
+| 13 |         13 |         3 | 129.50 | rocket         | TXN113RK       | pending        | NULL         | 2025-07-27 18:30:17 |           NULL |
+| 14 |         14 |         4 |  59.00 | card           | TXN114CD       | complete       | NULL         | 2025-07-27 18:30:17 |           NULL |
++----+------------+-----------+--------+----------------+----------------+----------------+--------------+---------------------+----------------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> select c.title as course_title,sum(p.amount) as total_payment from payments p join courses c on p.course_id=c.id where month(p.payment_date)=month(current_date - interval 3 month) and year(p.payment_date)=year(current_date - interval 3 month) group by c.id,c.title order by total_payment desc;
++--------------------------+---------------+
+| course_title             | total_payment |
++--------------------------+---------------+
+| Digital Marketing Basics |        149.99 |
+| Python Programming       |         99.99 |
++--------------------------+---------------+
+2 rows in set (0.000 sec)
+
+MariaDB [course_management]> notee;

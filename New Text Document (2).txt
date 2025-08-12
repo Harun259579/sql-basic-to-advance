@@ -1,0 +1,141 @@
+Microsoft Windows [Version 10.0.19045.6093]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Abrar Faiyaj Harun>cd..
+
+C:\Users>cd..
+
+C:\>cd xampp
+
+C:\xampp>cd mysql
+
+C:\xampp\mysql>bin
+'bin' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\xampp\mysql>cd bin
+
+C:\xampp\mysql\bin>mysql.exe -u root --password
+Enter password:
+ERROR 2002 (HY000): Can't connect to MySQL server on 'localhost' (10061)
+
+C:\xampp\mysql\bin>mysql.exe -u root --password
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 16
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> create database course_management
+    -> ;
+Query OK, 1 row affected (0.003 sec)
+
+MariaDB [(none)]> use course_management;
+Database changed
+MariaDB [course_management]> create table students;
+ERROR 1113 (42000): A table must have at least 1 column
+MariaDB [course_management]> create table students(id int primary key auto increment,name varchar(20),email varchar(30),address varchar(100),photo varcher(20),admission date varchar(20) );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'auto increment,name varchar(20),email varchar(30),address varchar(100),photo ...' at line 1
+MariaDB [course_management]> CREATE TABLE students (
+    ->     id INT PRIMARY KEY AUTO_INCREMENT,
+    ->     name VARCHAR(20),
+    ->     email VARCHAR(30),
+    ->     address VARCHAR(100),
+    ->     photo VARCHAR(20),
+    ->     admission_date VARCHAR(20)
+    -> );
+Query OK, 0 rows affected (0.016 sec)
+
+MariaDB [course_management]> show tables;
++-----------------------------+
+| Tables_in_course_management |
++-----------------------------+
+| students                    |
++-----------------------------+
+1 row in set (0.001 sec)
+
+MariaDB [course_management]> insert into students values('','abrar','abrar341024@gmail.com','mirpur','abrar.jpg','12 july 2025'),('','Mahfuz','mahfuz1024@gmail.com','mirpur','mahfuz.jpg','19 july 2025'),('','Habib','habib@gmail.com','uttara','habib.jpg','17 july 2024'),('','Asik','asik341024@gmail.com','mirpur','asik.jpg','12 july 2025'),('','Nafiz','nafis341024@gmail.com','savar','nafiz.jpg','10 july 2024'),('','Zakir','zakir23@gmail.com','kuril','zakir.jpg','15 july 2025');
+Query OK, 6 rows affected, 6 warnings (0.066 sec)
+Records: 6  Duplicates: 0  Warnings: 6
+
+MariaDB [course_management]> select * from students;
++----+--------+-----------------------+---------+------------+----------------+
+| id | name   | email                 | address | photo      | admission_date |
++----+--------+-----------------------+---------+------------+----------------+
+|  1 | abrar  | abrar341024@gmail.com | mirpur  | abrar.jpg  | 12 july 2025   |
+|  2 | Mahfuz | mahfuz1024@gmail.com  | mirpur  | mahfuz.jpg | 19 july 2025   |
+|  3 | Habib  | habib@gmail.com       | uttara  | habib.jpg  | 17 july 2024   |
+|  4 | Asik   | asik341024@gmail.com  | mirpur  | asik.jpg   | 12 july 2025   |
+|  5 | Nafiz  | nafis341024@gmail.com | savar   | nafiz.jpg  | 10 july 2024   |
+|  6 | Zakir  | zakir23@gmail.com     | kuril   | zakir.jpg  | 15 july 2025   |
++----+--------+-----------------------+---------+------------+----------------+
+6 rows in set (0.001 sec)
+
+MariaDB [course_management]> select address from students distinct;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'distinct' at line 1
+MariaDB [course_management]> distinct address from students;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'distinct address from students' at line 1
+MariaDB [course_management]> select disticnt address from students;
+ERROR 1054 (42S22): Unknown column 'disticnt' in 'field list'
+MariaDB [course_management]> SELECT DISTINCT address FROM students;
++---------+
+| address |
++---------+
+| mirpur  |
+| uttara  |
+| savar   |
+| kuril   |
++---------+
+4 rows in set (0.001 sec)
+
+MariaDB [course_management]> select distinct address from students;
++---------+
+| address |
++---------+
+| mirpur  |
+| uttara  |
+| savar   |
+| kuril   |
++---------+
+4 rows in set (0.001 sec)
+
+MariaDB [course_management]> select * from students where address='mirpur';
++----+--------+-----------------------+---------+------------+----------------+
+| id | name   | email                 | address | photo      | admission_date |
++----+--------+-----------------------+---------+------------+----------------+
+|  1 | abrar  | abrar341024@gmail.com | mirpur  | abrar.jpg  | 12 july 2025   |
+|  2 | Mahfuz | mahfuz1024@gmail.com  | mirpur  | mahfuz.jpg | 19 july 2025   |
+|  4 | Asik   | asik341024@gmail.com  | mirpur  | asik.jpg   | 12 july 2025   |
++----+--------+-----------------------+---------+------------+----------------+
+3 rows in set (0.001 sec)
+
+MariaDB [course_management]> select * from students where admission_date='july 2025';
+Empty set (0.001 sec)
+
+MariaDB [course_management]> select * from students where admission_date= '12 july 2025';
++----+-------+-----------------------+---------+-----------+----------------+
+| id | name  | email                 | address | photo     | admission_date |
++----+-------+-----------------------+---------+-----------+----------------+
+|  1 | abrar | abrar341024@gmail.com | mirpur  | abrar.jpg | 12 july 2025   |
+|  4 | Asik  | asik341024@gmail.com  | mirpur  | asik.jpg  | 12 july 2025   |
++----+-------+-----------------------+---------+-----------+----------------+
+2 rows in set (0.001 sec)
+
+MariaDB [course_management]> select name,email,address from students;
++--------+-----------------------+---------+
+| name   | email                 | address |
++--------+-----------------------+---------+
+| abrar  | abrar341024@gmail.com | mirpur  |
+| Mahfuz | mahfuz1024@gmail.com  | mirpur  |
+| Habib  | habib@gmail.com       | uttara  |
+| Asik   | asik341024@gmail.com  | mirpur  |
+| Nafiz  | nafis341024@gmail.com | savar   |
+| Zakir  | zakir23@gmail.com     | kuril   |
++--------+-----------------------+---------+
+6 rows in set (0.001 sec)
+
+MariaDB [course_management]> doskey /history > my_cmd_history.txt
+    -> ;
