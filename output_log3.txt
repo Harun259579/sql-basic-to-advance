@@ -1,0 +1,539 @@
+MariaDB [course_management]> alter table students add date_of_birth date after address;
+ERROR 1054 (42S22): Unknown column 'address' in 'students'
+MariaDB [course_management]> alter table students add date_of_birth date after adress;
+Query OK, 0 rows affected (0.014 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> desc students;
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| id            | int(10)      | NO   | PRI | NULL    | auto_increment |
+| name          | varchar(50)  | YES  |     | NULL    |                |
+| email         | varchar(20)  | YES  |     | NULL    |                |
+| phone         | varchar(15)  | YES  |     | NULL    |                |
+| adress        | text         | YES  |     | NULL    |                |
+| date_of_birth | date         | YES  |     | NULL    |                |
+| photo         | varchar(150) | YES  |     | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+
+7 rows in set (0.010 sec)
+
+MariaDB [course_management]> selcet * from students;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'selcet * from students' at line 1
+MariaDB [course_management]> select * from students;
++----+--------+--------------------+--------------+----------+---------------+------------+
+| id | name   | email              | phone        | adress   | date_of_birth | photo      |
++----+--------+--------------------+--------------+----------+---------------+------------+
+|  1 | Abrar  | abc@gmail.com      | 01770234556  | mirpur   | NULL          | abrar.jpg  |
+|  2 | Asif   | abc23@gmail.com    | 017702343456 | Firmgate | NULL          | asif.jpg   |
+|  3 | Nafiz  | nafiz3@gmail.com   | 019702343456 | savar    | NULL          | nafiz.jpg  |
+|  4 | Mahfuz | mahfuz23@gmail.com | 019202343456 | asulia   | NULL          | mahfuz.jpg |
++----+--------+--------------------+--------------+----------+---------------+------------+
+4 rows in set (0.000 sec)
+
+MariaDB [course_management]> alter table students add email_verified_at boolean default false after date_of_birth;
+Query OK, 0 rows affected (0.018 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> alter table students change adress address varchar(100); 
+Query OK, 4 rows affected (0.109 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> desc students;
++-------------------+--------------+------+-----+---------+----------------+
+| Field             | Type         | Null | Key | Default | Extra          |
++-------------------+--------------+------+-----+---------+----------------+
+| id                | int(10)      | NO   | PRI | NULL    | auto_increment |
+| name              | varchar(50)  | YES  |     | NULL    |                |
+| email             | varchar(20)  | YES  |     | NULL    |                |
+| phone             | varchar(15)  | YES  |     | NULL    |                |
+| address           | varchar(100) | YES  |     | NULL    |                |
+| date_of_birth     | date         | YES  |     | NULL    |                |
+| email_verified_at | tinyint(1)   | YES  |     | 0       |                |
+| photo             | varchar(150) | YES  |     | NULL    |                |
++-------------------+--------------+------+-----+---------+----------------+
+8 rows in set (0.029 sec)
+
+MariaDB [course_management]> select * from students;
++----+--------+--------------------+--------------+----------+---------------+-------------------+------------+
+| id | name   | email              | phone        | address  | date_of_birth | email_verified_at | photo      |
++----+--------+--------------------+--------------+----------+---------------+-------------------+------------+
+|  1 | Abrar  | abc@gmail.com      | 01770234556  | mirpur   | NULL          |                 0 | abrar.jpg  |
+|  2 | Asif   | abc23@gmail.com    | 017702343456 | Firmgate | NULL          |                 0 | asif.jpg   |
+|  3 | Nafiz  | nafiz3@gmail.com   | 019702343456 | savar    | NULL          |                 0 | nafiz.jpg  |
+|  4 | Mahfuz | mahfuz23@gmail.com | 019202343456 | asulia   | NULL          |                 0 | mahfuz.jpg |
++----+--------+--------------------+--------------+----------+---------------+-------------------+------------+
+4 rows in set (0.000 sec)
+
+MariaDB [course_management]> update students set date_of_birth='1999-07-14' where id=1;
+Query OK, 1 row affected (0.006 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [course_management]> select * from students;
++----+--------+--------------------+--------------+----------+---------------+-------------------+------------+
+| id | name   | email              | phone        | address  | date_of_birth | email_verified_at | photo      |
++----+--------+--------------------+--------------+----------+---------------+-------------------+------------+
+|  1 | Abrar  | abc@gmail.com      | 01770234556  | mirpur   | 1999-07-14    |                 0 | abrar.jpg  |
+|  2 | Asif   | abc23@gmail.com    | 017702343456 | Firmgate | NULL          |                 0 | asif.jpg   |
+|  3 | Nafiz  | nafiz3@gmail.com   | 019702343456 | savar    | NULL          |                 0 | nafiz.jpg  |
+|  4 | Mahfuz | mahfuz23@gmail.com | 019202343456 | asulia   | NULL          |                 0 | mahfuz.jpg |
++----+--------+--------------------+--------------+----------+---------------+-------------------+------------+
+4 rows in set (0.000 sec)
+
+MariaDB [course_management]> update students set date_of_birth='1995-07-14' where id=2;
+Query OK, 1 row affected (0.006 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [course_management]> update students set date_of_birth='1995-07-24' and email_verified_at=true where id=3;
+Query OK, 1 row affected, 3 warnings (0.007 sec)
+Rows matched: 1  Changed: 1  Warnings: 3
+
+MariaDB [course_management]> select * from students;
++----+--------+--------------------+--------------+----------+---------------+-------------------+------------+
+| id | name   | email              | phone        | address  | date_of_birth | email_verified_at | photo      |
++----+--------+--------------------+--------------+----------+---------------+-------------------+------------+
+|  1 | Abrar  | abc@gmail.com      | 01770234556  | mirpur   | 1999-07-14    |                 0 | abrar.jpg  |
+|  2 | Asif   | abc23@gmail.com    | 017702343456 | Firmgate | 1995-07-14    |                 0 | asif.jpg   |
+|  3 | Nafiz  | nafiz3@gmail.com   | 019702343456 | savar    | 0000-00-00    |                 0 | nafiz.jpg  |
+|  4 | Mahfuz | mahfuz23@gmail.com | 019202343456 | asulia   | NULL          |                 0 | mahfuz.jpg |
++----+--------+--------------------+--------------+----------+---------------+-------------------+------------+
+4 rows in set (0.000 sec)
+
+MariaDB [course_management]> update students set date_of_birth='1997-07-14' where id=3;
+Query OK, 1 row affected (0.005 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [course_management]> update students set date_of_birth='2000-03-24' where id=4;
+Query OK, 1 row affected (0.006 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [course_management]> update students set email_verified_at=true where id=4;
+Query OK, 1 row affected (0.006 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [course_management]> update students set email_verified_at=true where id=3;
+Query OK, 1 row affected (0.007 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [course_management]> update students set email_verified_at=false where id=2;
+Query OK, 0 rows affected (0.000 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+MariaDB [course_management]> update students set email_verified_at=false where id=1;
+Query OK, 0 rows affected (0.000 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+MariaDB [course_management]> select * from students;
++----+--------+--------------------+--------------+----------+---------------+-------------------+------------+
+| id | name   | email              | phone        | address  | date_of_birth | email_verified_at | photo      |
++----+--------+--------------------+--------------+----------+---------------+-------------------+------------+
+|  1 | Abrar  | abc@gmail.com      | 01770234556  | mirpur   | 1999-07-14    |                 0 | abrar.jpg  |
+|  2 | Asif   | abc23@gmail.com    | 017702343456 | Firmgate | 1995-07-14    |                 0 | asif.jpg   |
+|  3 | Nafiz  | nafiz3@gmail.com   | 019702343456 | savar    | 1997-07-14    |                 1 | nafiz.jpg  |
+|  4 | Mahfuz | mahfuz23@gmail.com | 019202343456 | asulia   | 2000-03-24    |                 1 | mahfuz.jpg |
++----+--------+--------------------+--------------+----------+---------------+-------------------+------------+
+4 rows in set (0.000 sec)
+
+MariaDB [course_management]> update students set email_verified_at=true where id=1;
+Query OK, 1 row affected (0.006 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [course_management]> select * from students;
++----+--------+--------------------+--------------+----------+---------------+-------------------+------------+
+| id | name   | email              | phone        | address  | date_of_birth | email_verified_at | photo      |
++----+--------+--------------------+--------------+----------+---------------+-------------------+------------+
+|  1 | Abrar  | abc@gmail.com      | 01770234556  | mirpur   | 1999-07-14    |                 1 | abrar.jpg  |
+|  2 | Asif   | abc23@gmail.com    | 017702343456 | Firmgate | 1995-07-14    |                 0 | asif.jpg   |
+|  3 | Nafiz  | nafiz3@gmail.com   | 019702343456 | savar    | 1997-07-14    |                 1 | nafiz.jpg  |
+|  4 | Mahfuz | mahfuz23@gmail.com | 019202343456 | asulia   | 2000-03-24    |                 1 | mahfuz.jpg |
++----+--------+--------------------+--------------+----------+---------------+-------------------+------------+
+4 rows in set (0.000 sec)
+
+MariaDB [course_management]> INSERT INTO users (id, name, email, phone, address, date_of_birth, email_verified_at, photo) VALUES
+    -> (1, 'Jon Doe', 'jon1@example.com', '1234567890', '123 Main St', '1990-01-01', '2023-07-01 10:00:00', 'photo1.jpg'),
+    -> (2, 'Jane Smith', 'jane2@example.com', '1234567891', '456 Maple Ave', '1991-02-02', '2023-07-02 11:00:00', 'photo2.jpg'),
+    -> (3, 'Mike Ross', 'mike3@example.com', '1234567892', '789 Oak Dr', '1992-03-03', '2023-07-03 12:00:00', 'photo3.jpg'),
+    -> (4, 'Rachel Zane', 'rachel4@example.com', '1234567893', '101 Elm St', '1993-04-04', '2023-07-04 13:00:00', 'photo4.jpg'),
+    -> (5, 'Harvey Specter', 'harvey5@example.com', '1234567894', '202 Pine Rd', '1985-05-05', '2023-07-05 14:00:00', 'photo5.jpg'),
+    -> (6, 'Donna Paulsen', 'donna6@example.com', '1234567895', '303 Birch Ln', '1986-06-06', '2023-07-06 15:00:00', 'photo6.jpg'),
+    -> (7, 'Louis Litt', 'louis7@example.com', '1234567896', '404 Cedar St', '1987-07-07', '2023-07-07 16:00:00', 'photo7.jpg'),
+    -> (8, 'Jessica Pearson', 'jessica8@example.com', '1234567897', '505 Walnut Ave', '1988-08-08', '2023-07-08 17:00:00', 'photo8.jpg'),
+    -> (9, 'Sheila Sazs', 'sheila9@example.com', '1234567898', '606 Ash Dr', '1989-09-09', '2023-07-09 18:00:00', 'photo9.jpg'),
+    -> (10, 'Katrina Bennett', 'katrina10@example.com', '1234567899', '707 Spruce Rd', '1994-10-10', '2023-07-10 19:00:00', 'photo10.jpg');
+ERROR 1146 (42S02): Table 'course_management.users' doesn't exist
+MariaDB [course_management]> INSERT INTO users (id, name, email, phone, address, date_of_birth, email_verified_at, photo) VALUES
+    -> (1, 'Jon Doe', 'jon1@example.com', '1234567890', '123 Main St', '1990-01-01', '2023-07-01 10:00:00', 'photo1.jpg'),
+    -> (2, 'Jane Smith', 'jane2@example.com', '1234567891', '456 Maple Ave', '1991-02-02', '2023-07-02 11:00:00', 'photo2.jpg'),
+    -> (3, 'Mike Ross', 'mike3@example.com', '1234567892', '789 Oak Dr', '1992-03-03', '2023-07-03 12:00:00', 'photo3.jpg'),
+    -> (4, 'Rachel Zane', 'rachel4@example.com', '1234567893', '101 Elm St', '1993-04-04', '2023-07-04 13:00:00', 'photo4.jpg'),
+    -> (5, 'Harvey Specter', 'harvey5@example.com', '1234567894', '202 Pine Rd', '1985-05-05', '2023-07-05 14:00:00', 'photo5.jpg'),
+    -> (6, 'Donna Paulsen', 'donna6@example.com', '1234567895', '303 Birch Ln', '1986-06-06', '2023-07-06 15:00:00', 'photo6.jpg'),
+    -> (7, 'Louis Litt', 'louis7@example.com', '1234567896', '404 Cedar St', '1987-07-07', '2023-07-07 16:00:00', 'photo7.jpg'),
+    -> (8, 'Jessica Pearson', 'jessica8@example.com', '1234567897', '505 Walnut Ave', '1988-08-08', '2023-07-08 17:00:00', 'photo8.jpg'),
+    -> (9, 'Sheila Sazs', 'sheila9@example.com', '1234567898', '606 Ash Dr', '1989-09-09', '2023-07-09 18:00:00', 'photo9.jpg'),
+    -> (10, 'Katrina Bennett', 'katrina10@example.com', '1234567899', '707 Spruce Rd', '1994-10-10', '2023-07-10 19:00:00', 'photo10.jpg');
+ERROR 1146 (42S02): Table 'course_management.users' doesn't exist
+MariaDB [course_management]> INSERT INTO students (name, email, phone, address, date_of_birth, email_verified, photo) VALUES
+    -> ('Jon Doe', 'jon1@example.com', '1234567890', '123 Main St', '1990-01-01', TRUE, 'photo1.jpg'),
+    -> ('Jane Smith', 'jane2@example.com', '1234567891', '456 Maple Ave', '1991-02-02', TRUE, 'photo2.jpg'),
+    -> ('Mike Ross', 'mike3@example.com', '1234567892', '789 Oak Dr', '1992-03-03', FALSE, 'photo3.jpg'),
+    -> ('Rachel Zane', 'rachel4@example.com', '1234567893', '101 Elm St', '1993-04-04', TRUE, 'photo4.jpg'),
+    -> ('Harvey Specter', 'harvey5@example.com', '1234567894', '202 Pine Rd', '1985-05-05', TRUE, 'photo5.jpg'),
+    -> ('Donna Paulsen', 'donna6@example.com', '1234567895', '303 Birch Ln', '1986-06-06', TRUE, 'photo6.jpg'),
+    -> ('Louis Litt', 'louis7@example.com', '1234567896', '404 Cedar St', '1987-07-07', FALSE, 'photo7.jpg'),
+    -> ('Jessica Pearson', 'jessica8@example.com', '1234567897', '505 Walnut Ave', '1988-08-08', TRUE, 'photo8.jpg'),
+    -> ('Sheila Sazs', 'sheila9@example.com', '1234567898', '606 Ash Dr', '1989-09-09', FALSE, 'photo9.jpg'),
+    -> ('Katrina Bennett', 'katrina10@example.com', '1234567899', '707 Spruce Rd', '1994-10-10', TRUE, 'photo10.jpg');
+ERROR 1054 (42S22): Unknown column 'email_verified' in 'field list'
+MariaDB [course_management]> alter table students add gender enum('male','female','others') after address;
+Query OK, 0 rows affected (0.099 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> update students set gender='male' where id=1;
+Query OK, 1 row affected (0.071 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [course_management]> INSERT INTO students (name, email, phone, address, date_of_birth, email_verified_at, photo) VALUES ('Jon Doe', 'jon1@example.com', '1234567890', '123 Main St', '1990-01-01', TRUE, 'photo1.jpg'),
+    -> ('Jane Smith', 'jane2@example.com', '1234567891', '456 Maple Ave', '1991-02-02', TRUE, 'photo2.jpg'),
+    -> ('Mike Ross', 'mike3@example.com', '1234567892', '789 Oak Dr', '1992-03-03', FALSE, 'photo3.jpg'),
+    -> ('Rachel Zane', 'rachel4@example.com', '1234567893', '101 Elm St', '1993-04-04', TRUE, 'photo4.jpg'),
+    -> ('Harvey Specter', 'harvey5@example.com', '1234567894', '202 Pine Rd', '1985-05-05', TRUE, 'photo5.jpg'),
+    -> ('Donna Paulsen', 'donna6@example.com', '1234567895', '303 Birch Ln', '1986-06-06', TRUE, 'photo6.jpg'),
+    -> ('Louis Litt', 'louis7@example.com', '1234567896', '404 Cedar St', '1987-07-07', FALSE, 'photo7.jpg'),
+    -> ('Jessica Pearson', 'jessica8@example.com', '1234567897', '505 Walnut Ave', '1988-08-08', TRUE, 'photo8.jpg'),
+    -> ('Sheila Sazs', 'sheila9@example.com', '1234567898', '606 Ash Dr', '1989-09-09', FALSE, 'photo9.jpg'),
+    -> ('Katrina Bennett', 'katrina10@example.com', '1234567899', '707 Spruce Rd', '1994-10-10', TRUE, 'photo10.jpg');
+Query OK, 10 rows affected, 1 warning (0.087 sec)
+Records: 10  Duplicates: 0  Warnings: 1
+
+MariaDB [course_management]> select * from students;
++----+-----------------+----------------------+--------------+----------------+--------+---------------+-------------------+-------------+
+| id | name            | email                | phone        | address        | gender | date_of_birth | email_verified_at | photo       |
++----+-----------------+----------------------+--------------+----------------+--------+---------------+-------------------+-------------+
+|  1 | Abrar           | abc@gmail.com        | 01770234556  | mirpur         | male   | 1999-07-14    |                 1 | abrar.jpg   |
+|  2 | Asif            | abc23@gmail.com      | 017702343456 | Firmgate       | NULL   | 1995-07-14    |                 0 | asif.jpg    |
+|  3 | Nafiz           | nafiz3@gmail.com     | 019702343456 | savar          | NULL   | 1997-07-14    |                 1 | nafiz.jpg   |
+|  4 | Mahfuz          | mahfuz23@gmail.com   | 019202343456 | asulia         | NULL   | 2000-03-24    |                 1 | mahfuz.jpg  |
+|  5 | Jon Doe         | jon1@example.com     | 1234567890   | 123 Main St    | NULL   | 1990-01-01    |                 1 | photo1.jpg  |
+|  6 | Jane Smith      | jane2@example.com    | 1234567891   | 456 Maple Ave  | NULL   | 1991-02-02    |                 1 | photo2.jpg  |
+|  7 | Mike Ross       | mike3@example.com    | 1234567892   | 789 Oak Dr     | NULL   | 1992-03-03    |                 0 | photo3.jpg  |
+|  8 | Rachel Zane     | rachel4@example.com  | 1234567893   | 101 Elm St     | NULL   | 1993-04-04    |                 1 | photo4.jpg  |
+|  9 | Harvey Specter  | harvey5@example.com  | 1234567894   | 202 Pine Rd    | NULL   | 1985-05-05    |                 1 | photo5.jpg  |
+| 10 | Donna Paulsen   | donna6@example.com   | 1234567895   | 303 Birch Ln   | NULL   | 1986-06-06    |                 1 | photo6.jpg  |
+| 11 | Louis Litt      | louis7@example.com   | 1234567896   | 404 Cedar St   | NULL   | 1987-07-07    |                 0 | photo7.jpg  |
+| 12 | Jessica Pearson | jessica8@example.com | 1234567897   | 505 Walnut Ave | NULL   | 1988-08-08    |                 1 | photo8.jpg  |
+| 13 | Sheila Sazs     | sheila9@example.com  | 1234567898   | 606 Ash Dr     | NULL   | 1989-09-09    |                 0 | photo9.jpg  |
+| 14 | Katrina Bennett | katrina10@example.co | 1234567899   | 707 Spruce Rd  | NULL   | 1994-10-10    |                 1 | photo10.jpg |
++----+-----------------+----------------------+--------------+----------------+--------+---------------+-------------------+-------------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> selsect
+    -> 
+    -> 
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'selsect' at line 1
+MariaDB [course_management]> select name,email from students where address='mirpur' limit 1;
++-------+---------------+
+| name  | email         |
++-------+---------------+
+| Abrar | abc@gmail.com |
++-------+---------------+
+1 row in set (0.000 sec)
+
+MariaDB [course_management]> update students set address='mirpur' where id=5;
+Query OK, 1 row affected (0.026 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [course_management]> update students set address='dhanmondi' where id=6;
+Query OK, 1 row affected (0.041 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [course_management]> update students set address='dhanmondi' where id in(6,7);
+Query OK, 1 row affected (0.055 sec)
+Rows matched: 2  Changed: 1  Warnings: 0
+
+MariaDB [course_management]> select * students;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'students' at line 1
+MariaDB [course_management]> select *from students;
++----+-----------------+----------------------+--------------+----------------+--------+---------------+-------------------+-------------+
+| id | name            | email                | phone        | address        | gender | date_of_birth | email_verified_at | photo       |
++----+-----------------+----------------------+--------------+----------------+--------+---------------+-------------------+-------------+
+|  1 | Abrar           | abc@gmail.com        | 01770234556  | mirpur         | male   | 1999-07-14    |                 1 | abrar.jpg   |
+|  2 | Asif            | abc23@gmail.com      | 017702343456 | Firmgate       | NULL   | 1995-07-14    |                 0 | asif.jpg    |
+|  3 | Nafiz           | nafiz3@gmail.com     | 019702343456 | savar          | NULL   | 1997-07-14    |                 1 | nafiz.jpg   |
+|  4 | Mahfuz          | mahfuz23@gmail.com   | 019202343456 | asulia         | NULL   | 2000-03-24    |                 1 | mahfuz.jpg  |
+|  5 | Jon Doe         | jon1@example.com     | 1234567890   | mirpur         | NULL   | 1990-01-01    |                 1 | photo1.jpg  |
+|  6 | Jane Smith      | jane2@example.com    | 1234567891   | dhanmondi      | NULL   | 1991-02-02    |                 1 | photo2.jpg  |
+|  7 | Mike Ross       | mike3@example.com    | 1234567892   | dhanmondi      | NULL   | 1992-03-03    |                 0 | photo3.jpg  |
+|  8 | Rachel Zane     | rachel4@example.com  | 1234567893   | 101 Elm St     | NULL   | 1993-04-04    |                 1 | photo4.jpg  |
+|  9 | Harvey Specter  | harvey5@example.com  | 1234567894   | 202 Pine Rd    | NULL   | 1985-05-05    |                 1 | photo5.jpg  |
+| 10 | Donna Paulsen   | donna6@example.com   | 1234567895   | 303 Birch Ln   | NULL   | 1986-06-06    |                 1 | photo6.jpg  |
+| 11 | Louis Litt      | louis7@example.com   | 1234567896   | 404 Cedar St   | NULL   | 1987-07-07    |                 0 | photo7.jpg  |
+| 12 | Jessica Pearson | jessica8@example.com | 1234567897   | 505 Walnut Ave | NULL   | 1988-08-08    |                 1 | photo8.jpg  |
+| 13 | Sheila Sazs     | sheila9@example.com  | 1234567898   | 606 Ash Dr     | NULL   | 1989-09-09    |                 0 | photo9.jpg  |
+| 14 | Katrina Bennett | katrina10@example.co | 1234567899   | 707 Spruce Rd  | NULL   | 1994-10-10    |                 1 | photo10.jpg |
++----+-----------------+----------------------+--------------+----------------+--------+---------------+-------------------+-------------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> update students set gender='male' where id in(2,3,4,5,6,7);
+Query OK, 6 rows affected (0.013 sec)
+Rows matched: 6  Changed: 6  Warnings: 0
+
+MariaDB [course_management]> update students set gender='female' where id in(7,10,11,12,13,14);
+Query OK, 6 rows affected (0.015 sec)
+Rows matched: 6  Changed: 6  Warnings: 0
+
+MariaDB [course_management]> select *from students;
++----+-----------------+----------------------+--------------+----------------+--------+---------------+-------------------+-------------+
+| id | name            | email                | phone        | address        | gender | date_of_birth | email_verified_at | photo       |
++----+-----------------+----------------------+--------------+----------------+--------+---------------+-------------------+-------------+
+|  1 | Abrar           | abc@gmail.com        | 01770234556  | mirpur         | male   | 1999-07-14    |                 1 | abrar.jpg   |
+|  2 | Asif            | abc23@gmail.com      | 017702343456 | Firmgate       | male   | 1995-07-14    |                 0 | asif.jpg    |
+|  3 | Nafiz           | nafiz3@gmail.com     | 019702343456 | savar          | male   | 1997-07-14    |                 1 | nafiz.jpg   |
+|  4 | Mahfuz          | mahfuz23@gmail.com   | 019202343456 | asulia         | male   | 2000-03-24    |                 1 | mahfuz.jpg  |
+|  5 | Jon Doe         | jon1@example.com     | 1234567890   | mirpur         | male   | 1990-01-01    |                 1 | photo1.jpg  |
+|  6 | Jane Smith      | jane2@example.com    | 1234567891   | dhanmondi      | male   | 1991-02-02    |                 1 | photo2.jpg  |
+|  7 | Mike Ross       | mike3@example.com    | 1234567892   | dhanmondi      | female | 1992-03-03    |                 0 | photo3.jpg  |
+|  8 | Rachel Zane     | rachel4@example.com  | 1234567893   | 101 Elm St     | NULL   | 1993-04-04    |                 1 | photo4.jpg  |
+|  9 | Harvey Specter  | harvey5@example.com  | 1234567894   | 202 Pine Rd    | NULL   | 1985-05-05    |                 1 | photo5.jpg  |
+| 10 | Donna Paulsen   | donna6@example.com   | 1234567895   | 303 Birch Ln   | female | 1986-06-06    |                 1 | photo6.jpg  |
+| 11 | Louis Litt      | louis7@example.com   | 1234567896   | 404 Cedar St   | female | 1987-07-07    |                 0 | photo7.jpg  |
+| 12 | Jessica Pearson | jessica8@example.com | 1234567897   | 505 Walnut Ave | female | 1988-08-08    |                 1 | photo8.jpg  |
+| 13 | Sheila Sazs     | sheila9@example.com  | 1234567898   | 606 Ash Dr     | female | 1989-09-09    |                 0 | photo9.jpg  |
+| 14 | Katrina Bennett | katrina10@example.co | 1234567899   | 707 Spruce Rd  | female | 1994-10-10    |                 1 | photo10.jpg |
++----+-----------------+----------------------+--------------+----------------+--------+---------------+-------------------+-------------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> update students set gender='male' where id in(8,9);
+Query OK, 2 rows affected (0.012 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+MariaDB [course_management]> select *from students;
++----+-----------------+----------------------+--------------+----------------+--------+---------------+-------------------+-------------+
+| id | name            | email                | phone        | address        | gender | date_of_birth | email_verified_at | photo       |
++----+-----------------+----------------------+--------------+----------------+--------+---------------+-------------------+-------------+
+|  1 | Abrar           | abc@gmail.com        | 01770234556  | mirpur         | male   | 1999-07-14    |                 1 | abrar.jpg   |
+|  2 | Asif            | abc23@gmail.com      | 017702343456 | Firmgate       | male   | 1995-07-14    |                 0 | asif.jpg    |
+|  3 | Nafiz           | nafiz3@gmail.com     | 019702343456 | savar          | male   | 1997-07-14    |                 1 | nafiz.jpg   |
+|  4 | Mahfuz          | mahfuz23@gmail.com   | 019202343456 | asulia         | male   | 2000-03-24    |                 1 | mahfuz.jpg  |
+|  5 | Jon Doe         | jon1@example.com     | 1234567890   | mirpur         | male   | 1990-01-01    |                 1 | photo1.jpg  |
+|  6 | Jane Smith      | jane2@example.com    | 1234567891   | dhanmondi      | male   | 1991-02-02    |                 1 | photo2.jpg  |
+|  7 | Mike Ross       | mike3@example.com    | 1234567892   | dhanmondi      | female | 1992-03-03    |                 0 | photo3.jpg  |
+|  8 | Rachel Zane     | rachel4@example.com  | 1234567893   | 101 Elm St     | male   | 1993-04-04    |                 1 | photo4.jpg  |
+|  9 | Harvey Specter  | harvey5@example.com  | 1234567894   | 202 Pine Rd    | male   | 1985-05-05    |                 1 | photo5.jpg  |
+| 10 | Donna Paulsen   | donna6@example.com   | 1234567895   | 303 Birch Ln   | female | 1986-06-06    |                 1 | photo6.jpg  |
+| 11 | Louis Litt      | louis7@example.com   | 1234567896   | 404 Cedar St   | female | 1987-07-07    |                 0 | photo7.jpg  |
+| 12 | Jessica Pearson | jessica8@example.com | 1234567897   | 505 Walnut Ave | female | 1988-08-08    |                 1 | photo8.jpg  |
+| 13 | Sheila Sazs     | sheila9@example.com  | 1234567898   | 606 Ash Dr     | female | 1989-09-09    |                 0 | photo9.jpg  |
+| 14 | Katrina Bennett | katrina10@example.co | 1234567899   | 707 Spruce Rd  | female | 1994-10-10    |                 1 | photo10.jpg |
++----+-----------------+----------------------+--------------+----------------+--------+---------------+-------------------+-------------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> update students set address='savar' where id in(8,9);
+Query OK, 2 rows affected (0.008 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+MariaDB [course_management]> update students set address='paltan' where id in(10,11,12);
+Query OK, 3 rows affected (0.024 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+MariaDB [course_management]> update students set address='bijoy saroni' where id in(13,14);
+Query OK, 2 rows affected (0.008 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+MariaDB [course_management]> select *from students;
++----+-----------------+----------------------+--------------+--------------+--------+---------------+-------------------+-------------+
+| id | name            | email                | phone        | address      | gender | date_of_birth | email_verified_at | photo       |
++----+-----------------+----------------------+--------------+--------------+--------+---------------+-------------------+-------------+
+|  1 | Abrar           | abc@gmail.com        | 01770234556  | mirpur       | male   | 1999-07-14    |                 1 | abrar.jpg   |
+|  2 | Asif            | abc23@gmail.com      | 017702343456 | Firmgate     | male   | 1995-07-14    |                 0 | asif.jpg    |
+|  3 | Nafiz           | nafiz3@gmail.com     | 019702343456 | savar        | male   | 1997-07-14    |                 1 | nafiz.jpg   |
+|  4 | Mahfuz          | mahfuz23@gmail.com   | 019202343456 | asulia       | male   | 2000-03-24    |                 1 | mahfuz.jpg  |
+|  5 | Jon Doe         | jon1@example.com     | 1234567890   | mirpur       | male   | 1990-01-01    |                 1 | photo1.jpg  |
+|  6 | Jane Smith      | jane2@example.com    | 1234567891   | dhanmondi    | male   | 1991-02-02    |                 1 | photo2.jpg  |
+|  7 | Mike Ross       | mike3@example.com    | 1234567892   | dhanmondi    | female | 1992-03-03    |                 0 | photo3.jpg  |
+|  8 | Rachel Zane     | rachel4@example.com  | 1234567893   | savar        | male   | 1993-04-04    |                 1 | photo4.jpg  |
+|  9 | Harvey Specter  | harvey5@example.com  | 1234567894   | savar        | male   | 1985-05-05    |                 1 | photo5.jpg  |
+| 10 | Donna Paulsen   | donna6@example.com   | 1234567895   | paltan       | female | 1986-06-06    |                 1 | photo6.jpg  |
+| 11 | Louis Litt      | louis7@example.com   | 1234567896   | paltan       | female | 1987-07-07    |                 0 | photo7.jpg  |
+| 12 | Jessica Pearson | jessica8@example.com | 1234567897   | paltan       | female | 1988-08-08    |                 1 | photo8.jpg  |
+| 13 | Sheila Sazs     | sheila9@example.com  | 1234567898   | bijoy saroni | female | 1989-09-09    |                 0 | photo9.jpg  |
+| 14 | Katrina Bennett | katrina10@example.co | 1234567899   | bijoy saroni | female | 1994-10-10    |                 1 | photo10.jpg |
++----+-----------------+----------------------+--------------+--------------+--------+---------------+-------------------+-------------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> select name,email,date_of_birth,curdate(),timestampdiff(year,date_of_birth,curdate()) as age;
+ERROR 1054 (42S22): Unknown column 'name' in 'field list'
+MariaDB [course_management]> select name,email,date_of_birth,curdate(),timestampdiff(year,date_of_birth,curdate()) as age from students;
++-----------------+----------------------+---------------+------------+------+
+| name            | email                | date_of_birth | curdate()  | age  |
++-----------------+----------------------+---------------+------------+------+
+| Abrar           | abc@gmail.com        | 1999-07-14    | 2025-07-26 |   26 |
+| Asif            | abc23@gmail.com      | 1995-07-14    | 2025-07-26 |   30 |
+| Nafiz           | nafiz3@gmail.com     | 1997-07-14    | 2025-07-26 |   28 |
+| Mahfuz          | mahfuz23@gmail.com   | 2000-03-24    | 2025-07-26 |   25 |
+| Jon Doe         | jon1@example.com     | 1990-01-01    | 2025-07-26 |   35 |
+| Jane Smith      | jane2@example.com    | 1991-02-02    | 2025-07-26 |   34 |
+| Mike Ross       | mike3@example.com    | 1992-03-03    | 2025-07-26 |   33 |
+| Rachel Zane     | rachel4@example.com  | 1993-04-04    | 2025-07-26 |   32 |
+| Harvey Specter  | harvey5@example.com  | 1985-05-05    | 2025-07-26 |   40 |
+| Donna Paulsen   | donna6@example.com   | 1986-06-06    | 2025-07-26 |   39 |
+| Louis Litt      | louis7@example.com   | 1987-07-07    | 2025-07-26 |   38 |
+| Jessica Pearson | jessica8@example.com | 1988-08-08    | 2025-07-26 |   36 |
+| Sheila Sazs     | sheila9@example.com  | 1989-09-09    | 2025-07-26 |   35 |
+| Katrina Bennett | katrina10@example.co | 1994-10-10    | 2025-07-26 |   30 |
++-----------------+----------------------+---------------+------------+------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> select name,email,date_of_birth month(date_of_birth)from students;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '(date_of_birth)from students' at line 1
+MariaDB [course_management]> select name,email,date_of_birth, month(date_of_birth)from students;
++-----------------+----------------------+---------------+----------------------+
+| name            | email                | date_of_birth | month(date_of_birth) |
++-----------------+----------------------+---------------+----------------------+
+| Abrar           | abc@gmail.com        | 1999-07-14    |                    7 |
+| Asif            | abc23@gmail.com      | 1995-07-14    |                    7 |
+| Nafiz           | nafiz3@gmail.com     | 1997-07-14    |                    7 |
+| Mahfuz          | mahfuz23@gmail.com   | 2000-03-24    |                    3 |
+| Jon Doe         | jon1@example.com     | 1990-01-01    |                    1 |
+| Jane Smith      | jane2@example.com    | 1991-02-02    |                    2 |
+| Mike Ross       | mike3@example.com    | 1992-03-03    |                    3 |
+| Rachel Zane     | rachel4@example.com  | 1993-04-04    |                    4 |
+| Harvey Specter  | harvey5@example.com  | 1985-05-05    |                    5 |
+| Donna Paulsen   | donna6@example.com   | 1986-06-06    |                    6 |
+| Louis Litt      | louis7@example.com   | 1987-07-07    |                    7 |
+| Jessica Pearson | jessica8@example.com | 1988-08-08    |                    8 |
+| Sheila Sazs     | sheila9@example.com  | 1989-09-09    |                    9 |
+| Katrina Bennett | katrina10@example.co | 1994-10-10    |                   10 |
++-----------------+----------------------+---------------+----------------------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> select name,email,date_of_birth,curdate() as today,timestampdiff(year,date_of_birth,curdate()) as age from students where timestampdiff(year,date_of_birth,curdate())>30 order by name;
++-----------------+----------------------+---------------+------------+------+
+| name            | email                | date_of_birth | today      | age  |
++-----------------+----------------------+---------------+------------+------+
+| Donna Paulsen   | donna6@example.com   | 1986-06-06    | 2025-07-26 |   39 |
+| Harvey Specter  | harvey5@example.com  | 1985-05-05    | 2025-07-26 |   40 |
+| Jane Smith      | jane2@example.com    | 1991-02-02    | 2025-07-26 |   34 |
+| Jessica Pearson | jessica8@example.com | 1988-08-08    | 2025-07-26 |   36 |
+| Jon Doe         | jon1@example.com     | 1990-01-01    | 2025-07-26 |   35 |
+| Louis Litt      | louis7@example.com   | 1987-07-07    | 2025-07-26 |   38 |
+| Mike Ross       | mike3@example.com    | 1992-03-03    | 2025-07-26 |   33 |
+| Rachel Zane     | rachel4@example.com  | 1993-04-04    | 2025-07-26 |   32 |
+| Sheila Sazs     | sheila9@example.com  | 1989-09-09    | 2025-07-26 |   35 |
++-----------------+----------------------+---------------+------------+------+
+9 rows in set (0.000 sec)
+
+MariaDB [course_management]>  select * from students where month(date_of_birth)=7;
++----+------------+--------------------+--------------+----------+--------+---------------+-------------------+------------+
+| id | name       | email              | phone        | address  | gender | date_of_birth | email_verified_at | photo      |
++----+------------+--------------------+--------------+----------+--------+---------------+-------------------+------------+
+|  1 | Abrar      | abc@gmail.com      | 01770234556  | mirpur   | male   | 1999-07-14    |                 1 | abrar.jpg  |
+|  2 | Asif       | abc23@gmail.com    | 017702343456 | Firmgate | male   | 1995-07-14    |                 0 | asif.jpg   |
+|  3 | Nafiz      | nafiz3@gmail.com   | 019702343456 | savar    | male   | 1997-07-14    |                 1 | nafiz.jpg  |
+| 11 | Louis Litt | louis7@example.com | 1234567896   | paltan   | female | 1987-07-07    |                 0 | photo7.jpg |
++----+------------+--------------------+--------------+----------+--------+---------------+-------------------+------------+
+4 rows in set (0.001 sec)
+
+MariaDB [course_management]> select count(name) from students;
++-------------+
+| count(name) |
++-------------+
+|          14 |
++-------------+
+1 row in set (0.000 sec)
+
+MariaDB [course_management]> select max(date_of_birth) from students;
++--------------------+
+| max(date_of_birth) |
++--------------------+
+| 2000-03-24         |
++--------------------+
+1 row in set (0.000 sec)
+
+MariaDB [course_management]> select min(date_of_birth) from students;
++--------------------+
+| min(date_of_birth) |
++--------------------+
+| 1985-05-05         |
++--------------------+
+1 row in set (0.000 sec)
+
+MariaDB [course_management]> start transection;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'transection' at line 1
+MariaDB [course_management]> start transaction;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [course_management]> delete from students where id = 14;
+Query OK, 1 row affected (0.019 sec)
+
+MariaDB [course_management]> select * from students;
++----+-----------------+----------------------+--------------+--------------+--------+---------------+-------------------+------------+
+| id | name            | email                | phone        | address      | gender | date_of_birth | email_verified_at | photo      |
++----+-----------------+----------------------+--------------+--------------+--------+---------------+-------------------+------------+
+|  1 | Abrar           | abc@gmail.com        | 01770234556  | mirpur       | male   | 1999-07-14    |                 1 | abrar.jpg  |
+|  2 | Asif            | abc23@gmail.com      | 017702343456 | Firmgate     | male   | 1995-07-14    |                 0 | asif.jpg   |
+|  3 | Nafiz           | nafiz3@gmail.com     | 019702343456 | savar        | male   | 1997-07-14    |                 1 | nafiz.jpg  |
+|  4 | Mahfuz          | mahfuz23@gmail.com   | 019202343456 | asulia       | male   | 2000-03-24    |                 1 | mahfuz.jpg |
+|  5 | Jon Doe         | jon1@example.com     | 1234567890   | mirpur       | male   | 1990-01-01    |                 1 | photo1.jpg |
+|  6 | Jane Smith      | jane2@example.com    | 1234567891   | dhanmondi    | male   | 1991-02-02    |                 1 | photo2.jpg |
+|  7 | Mike Ross       | mike3@example.com    | 1234567892   | dhanmondi    | female | 1992-03-03    |                 0 | photo3.jpg |
+|  8 | Rachel Zane     | rachel4@example.com  | 1234567893   | savar        | male   | 1993-04-04    |                 1 | photo4.jpg |
+|  9 | Harvey Specter  | harvey5@example.com  | 1234567894   | savar        | male   | 1985-05-05    |                 1 | photo5.jpg |
+| 10 | Donna Paulsen   | donna6@example.com   | 1234567895   | paltan       | female | 1986-06-06    |                 1 | photo6.jpg |
+| 11 | Louis Litt      | louis7@example.com   | 1234567896   | paltan       | female | 1987-07-07    |                 0 | photo7.jpg |
+| 12 | Jessica Pearson | jessica8@example.com | 1234567897   | paltan       | female | 1988-08-08    |                 1 | photo8.jpg |
+| 13 | Sheila Sazs     | sheila9@example.com  | 1234567898   | bijoy saroni | female | 1989-09-09    |                 0 | photo9.jpg |
++----+-----------------+----------------------+--------------+--------------+--------+---------------+-------------------+------------+
+13 rows in set (0.000 sec)
+
+MariaDB [course_management]> rollback;
+Query OK, 0 rows affected (0.019 sec)
+
+MariaDB [course_management]> select * from students;
++----+-----------------+----------------------+--------------+--------------+--------+---------------+-------------------+-------------+
+| id | name            | email                | phone        | address      | gender | date_of_birth | email_verified_at | photo       |
++----+-----------------+----------------------+--------------+--------------+--------+---------------+-------------------+-------------+
+|  1 | Abrar           | abc@gmail.com        | 01770234556  | mirpur       | male   | 1999-07-14    |                 1 | abrar.jpg   |
+|  2 | Asif            | abc23@gmail.com      | 017702343456 | Firmgate     | male   | 1995-07-14    |                 0 | asif.jpg    |
+|  3 | Nafiz           | nafiz3@gmail.com     | 019702343456 | savar        | male   | 1997-07-14    |                 1 | nafiz.jpg   |
+|  4 | Mahfuz          | mahfuz23@gmail.com   | 019202343456 | asulia       | male   | 2000-03-24    |                 1 | mahfuz.jpg  |
+|  5 | Jon Doe         | jon1@example.com     | 1234567890   | mirpur       | male   | 1990-01-01    |                 1 | photo1.jpg  |
+|  6 | Jane Smith      | jane2@example.com    | 1234567891   | dhanmondi    | male   | 1991-02-02    |                 1 | photo2.jpg  |
+|  7 | Mike Ross       | mike3@example.com    | 1234567892   | dhanmondi    | female | 1992-03-03    |                 0 | photo3.jpg  |
+|  8 | Rachel Zane     | rachel4@example.com  | 1234567893   | savar        | male   | 1993-04-04    |                 1 | photo4.jpg  |
+|  9 | Harvey Specter  | harvey5@example.com  | 1234567894   | savar        | male   | 1985-05-05    |                 1 | photo5.jpg  |
+| 10 | Donna Paulsen   | donna6@example.com   | 1234567895   | paltan       | female | 1986-06-06    |                 1 | photo6.jpg  |
+| 11 | Louis Litt      | louis7@example.com   | 1234567896   | paltan       | female | 1987-07-07    |                 0 | photo7.jpg  |
+| 12 | Jessica Pearson | jessica8@example.com | 1234567897   | paltan       | female | 1988-08-08    |                 1 | photo8.jpg  |
+| 13 | Sheila Sazs     | sheila9@example.com  | 1234567898   | bijoy saroni | female | 1989-09-09    |                 0 | photo9.jpg  |
+| 14 | Katrina Bennett | katrina10@example.co | 1234567899   | bijoy saroni | female | 1994-10-10    |                 1 | photo10.jpg |
++----+-----------------+----------------------+--------------+--------------+--------+---------------+-------------------+-------------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> select * from students where date_of_birth >'1995-12-31';
++----+--------+--------------------+--------------+---------+--------+---------------+-------------------+------------+
+| id | name   | email              | phone        | address | gender | date_of_birth | email_verified_at | photo      |
++----+--------+--------------------+--------------+---------+--------+---------------+-------------------+------------+
+|  1 | Abrar  | abc@gmail.com      | 01770234556  | mirpur  | male   | 1999-07-14    |                 1 | abrar.jpg  |
+|  3 | Nafiz  | nafiz3@gmail.com   | 019702343456 | savar   | male   | 1997-07-14    |                 1 | nafiz.jpg  |
+|  4 | Mahfuz | mahfuz23@gmail.com | 019202343456 | asulia  | male   | 2000-03-24    |                 1 | mahfuz.jpg |
++----+--------+--------------------+--------------+---------+--------+---------------+-------------------+------------+
+3 rows in set (0.000 sec)
+
+MariaDB [course_management]> select * from students where year(date_of_birth) between 1985 and 1992;
++----+-----------------+----------------------+------------+--------------+--------+---------------+-------------------+------------+
+| id | name            | email                | phone      | address      | gender | date_of_birth | email_verified_at | photo      |
++----+-----------------+----------------------+------------+--------------+--------+---------------+-------------------+------------+
+|  5 | Jon Doe         | jon1@example.com     | 1234567890 | mirpur       | male   | 1990-01-01    |                 1 | photo1.jpg |
+|  6 | Jane Smith      | jane2@example.com    | 1234567891 | dhanmondi    | male   | 1991-02-02    |                 1 | photo2.jpg |
+|  7 | Mike Ross       | mike3@example.com    | 1234567892 | dhanmondi    | female | 1992-03-03    |                 0 | photo3.jpg |
+|  9 | Harvey Specter  | harvey5@example.com  | 1234567894 | savar        | male   | 1985-05-05    |                 1 | photo5.jpg |
+| 10 | Donna Paulsen   | donna6@example.com   | 1234567895 | paltan       | female | 1986-06-06    |                 1 | photo6.jpg |
+| 11 | Louis Litt      | louis7@example.com   | 1234567896 | paltan       | female | 1987-07-07    |                 0 | photo7.jpg |
+| 12 | Jessica Pearson | jessica8@example.com | 1234567897 | paltan       | female | 1988-08-08    |                 1 | photo8.jpg |
+| 13 | Sheila Sazs     | sheila9@example.com  | 1234567898 | bijoy saroni | female | 1989-09-09    |                 0 | photo9.jpg |
++----+-----------------+----------------------+------------+--------------+--------+---------------+-------------------+------------+
+8 rows in set (0.000 sec)
+
+MariaDB [course_management]> notee;

@@ -1,0 +1,544 @@
+MariaDB [course_management]> select * from students;
++----+-----------------+----------------------+--------------+--------------+--------+---------------+-------------------+-------------+
+| id | name            | email                | phone        | address      | gender | date_of_birth | email_verified_at | photo       |
++----+-----------------+----------------------+--------------+--------------+--------+---------------+-------------------+-------------+
+|  1 | Abrar           | abc@gmail.com        | 01770234556  | mirpur       | male   | 1999-07-14    |                 1 | abrar.jpg   |
+|  2 | Asif            | abc23@gmail.com      | 017702343456 | Firmgate     | male   | 1995-07-14    |                 0 | asif.jpg    |
+|  3 | Nafiz           | nafiz3@gmail.com     | 019702343456 | savar        | male   | 1997-07-14    |                 1 | nafiz.jpg   |
+|  4 | Mahfuz          | mahfuz23@gmail.com   | 019202343456 | asulia       | male   | 2000-03-24    |                 1 | mahfuz.jpg  |
+|  5 | Jon Doe         | jon1@example.com     | 1234567890   | mirpur       | male   | 1990-01-01    |                 1 | photo1.jpg  |
+|  6 | Jane Smith      | jane2@example.com    | 1234567891   | dhanmondi    | male   | 1991-02-02    |                 1 | photo2.jpg  |
+|  7 | Mike Ross       | mike3@example.com    | 1234567892   | dhanmondi    | female | 1992-03-03    |                 0 | photo3.jpg  |
+|  8 | Rachel Zane     | rachel4@example.com  | 1234567893   | savar        | male   | 1993-04-04    |                 1 | photo4.jpg  |
+|  9 | Harvey Specter  | harvey5@example.com  | 1234567894   | savar        | male   | 1985-05-05    |                 1 | photo5.jpg  |
+| 10 | Donna Paulsen   | donna6@example.com   | 1234567895   | paltan       | female | 1986-06-06    |                 1 | photo6.jpg  |
+| 11 | Louis Litt      | louis7@example.com   | 1234567896   | paltan       | female | 1987-07-07    |                 0 | photo7.jpg  |
+| 12 | Jessica Pearson | jessica8@example.com | 1234567897   | paltan       | female | 1988-08-08    |                 1 | photo8.jpg  |
+| 13 | Sheila Sazs     | sheila9@example.com  | 1234567898   | bijoy saroni | female | 1989-09-09    |                 0 | photo9.jpg  |
+| 14 | Katrina Bennett | katrina10@example.co | 1234567899   | bijoy saroni | female | 1994-10-10    |                 1 | photo10.jpg |
++----+-----------------+----------------------+--------------+--------------+--------+---------------+-------------------+-------------+
+14 rows in set (0.062 sec)
+
+MariaDB [course_management]> create table categories;
+ERROR 1113 (42000): A table must have at least 1 column
+MariaDB [course_management]> create table categories(id in(11) not null,name varchar(30) not null,description text,created_at timestamp not null current_timestamp());
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'in(11) not null,name varchar(30) not null,description text,created_at timesta...' at line 1
+MariaDB [course_management]> CREATE TABLE categories (
+    ->     id INT(11) NOT NULL,
+    ->     name VARCHAR(30) NOT NULL,
+    ->     description TEXT,
+    ->     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    -> );
+Query OK, 0 rows affected (0.031 sec)
+
+MariaDB [course_management]> create table cources(id in(11) not null,title varchar(30) not null,description text not null, category_id int(11) default null,instructor_id int(11) default null,start_date date default null,price decimal(10,2),created_at timestamp not null current_timestamp);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'in(11) not null,title varchar(30) not null,description text not null, categor...' at line 1
+MariaDB [course_management]> CREATE TABLE courses (
+    ->     id INT(11) NOT NULL,
+    ->     title VARCHAR(30) NOT NULL,
+    ->     description TEXT NOT NULL,
+    ->     category_id INT(11) DEFAULT NULL,
+    ->     instructor_id INT(11) DEFAULT NULL,
+    ->     start_date DATE DEFAULT NULL,
+    ->     price DECIMAL(10,2),
+    ->     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    -> );
+Query OK, 0 rows affected (0.046 sec)
+
+MariaDB [course_management]> show tables;
++-----------------------------+
+| Tables_in_course_management |
++-----------------------------+
+| categories                  |
+| courses                     |
+| students                    |
++-----------------------------+
+3 rows in set (0.000 sec)
+
+MariaDB [course_management]>   desc categories;
++-------------+-------------+------+-----+---------------------+-------+
+| Field       | Type        | Null | Key | Default             | Extra |
++-------------+-------------+------+-----+---------------------+-------+
+| id          | int(11)     | NO   |     | NULL                |       |
+| name        | varchar(30) | NO   |     | NULL                |       |
+| description | text        | YES  |     | NULL                |       |
+| created_at  | timestamp   | NO   |     | current_timestamp() |       |
++-------------+-------------+------+-----+---------------------+-------+
+4 rows in set (0.011 sec)
+
+MariaDB [course_management]> alter table categoies add primary key(id);
+ERROR 1146 (42S02): Table 'course_management.categoies' doesn't exist
+MariaDB [course_management]> alter table categories add primary key(id);
+Query OK, 0 rows affected (0.077 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]>   desc categories;
++-------------+-------------+------+-----+---------------------+-------+
+| Field       | Type        | Null | Key | Default             | Extra |
++-------------+-------------+------+-----+---------------------+-------+
+| id          | int(11)     | NO   | PRI | NULL                |       |
+| name        | varchar(30) | NO   |     | NULL                |       |
+| description | text        | YES  |     | NULL                |       |
+| created_at  | timestamp   | NO   |     | current_timestamp() |       |
++-------------+-------------+------+-----+---------------------+-------+
+4 rows in set (0.009 sec)
+
+MariaDB [course_management]> create table instructor (id int auto_increment primary key,name varchar(30),email varchar(50),phone varchar(12),bio text,photo varchar(20),created_at timestamp default current_ timestam);p
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+    -> create table instructor (id int auto_increment primary key,name varchar(30),email varchar(50),phone varchar(12),bio text,photo varchar(20),created_at timestamp default current_ timestam);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'p
+create table instructor (id int auto_increment primary key,name varchar(30)...' at line 1
+MariaDB [course_management]> create table instructor (id int auto_increment primary key,name varchar(30),email varchar(50),phone varchar(12),bio text,photo varchar(20),created_at timestamp default current_ timestam);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ')' at line 1
+MariaDB [course_management]> CREATE TABLE instructor (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     name VARCHAR(30),
+    ->     email VARCHAR(50),
+    ->     phone VARCHAR(12),
+    ->     bio TEXT,
+    ->     photo VARCHAR(20),
+    ->     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    -> );
+Query OK, 0 rows affected (0.038 sec)
+
+MariaDB [course_management]> shows tables;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'shows tables' at line 1
+MariaDB [course_management]> show tables;
++-----------------------------+
+| Tables_in_course_management |
++-----------------------------+
+| categories                  |
+| courses                     |
+| instructor                  |
+| students                    |
++-----------------------------+
+4 rows in set (0.000 sec)
+
+MariaDB [course_management]> desc cources;
+ERROR 1146 (42S02): Table 'course_management.cources' doesn't exist
+MariaDB [course_management]> desc courses;
++---------------+---------------+------+-----+---------------------+-------+
+| Field         | Type          | Null | Key | Default             | Extra |
++---------------+---------------+------+-----+---------------------+-------+
+| id            | int(11)       | NO   |     | NULL                |       |
+| title         | varchar(30)   | NO   |     | NULL                |       |
+| description   | text          | NO   |     | NULL                |       |
+| category_id   | int(11)       | YES  |     | NULL                |       |
+| instructor_id | int(11)       | YES  |     | NULL                |       |
+| start_date    | date          | YES  |     | NULL                |       |
+| price         | decimal(10,2) | YES  |     | NULL                |       |
+| created_at    | timestamp     | NO   |     | current_timestamp() |       |
++---------------+---------------+------+-----+---------------------+-------+
+8 rows in set (0.011 sec)
+
+MariaDB [course_management]> alter table courses add foreign key(category_id) references categories(id) on delete set null;
+Query OK, 0 rows affected (0.140 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> alter table courses add foreign key(instructor_id) references instructor(id) on delete set null;
+Query OK, 0 rows affected (0.139 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> create table enrollments(id int auto_increment primary key,student_id int,course_id int,enrolled_at timestamp default current_timestamp,status enum('Approved','pending','completed') default 'pendinng',foreign key(student_id) references students(id) on delete cascade,foreign key(course_id) references courses(id) on delete cascade);
+ERROR 1067 (42000): Invalid default value for 'status'
+MariaDB [course_management]> CREATE TABLE enrollments (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     student_id INT,
+    ->     course_id INT,
+    ->     enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ->     status ENUM('Approved', 'pending', 'completed') DEFAULT 'pending',
+    ->     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    ->     FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+    -> );
+ERROR 1005 (HY000): Can't create table `course_management`.`enrollments` (errno: 150 "Foreign key constraint is incorrectly formed")
+MariaDB [course_management]> create table enrollments(id int auto_increment primary key,student_id int,course_id int,enrolled_at timestamp default current_timestamp,status enum('Approved','pending','completed') default 'pendinng',foreign key(student_id) references students(id) on delete cascade,foreign key(course_id) references courses(id) on delete cascade);
+ERROR 1067 (42000): Invalid default value for 'status'
+MariaDB [course_management]> desc courses;
++---------------+---------------+------+-----+---------------------+-------+
+| Field         | Type          | Null | Key | Default             | Extra |
++---------------+---------------+------+-----+---------------------+-------+
+| id            | int(11)       | NO   |     | NULL                |       |
+| title         | varchar(30)   | NO   |     | NULL                |       |
+| description   | text          | NO   |     | NULL                |       |
+| category_id   | int(11)       | YES  | MUL | NULL                |       |
+| instructor_id | int(11)       | YES  | MUL | NULL                |       |
+| start_date    | date          | YES  |     | NULL                |       |
+| price         | decimal(10,2) | YES  |     | NULL                |       |
+| created_at    | timestamp     | NO   |     | current_timestamp() |       |
++---------------+---------------+------+-----+---------------------+-------+
+8 rows in set (0.011 sec)
+
+MariaDB [course_management]> alter table courses add primary key(id);
+Query OK, 0 rows affected (0.084 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> create table enrollments(id int auto_increment primary key,student_id int,course_id int,enrolled_at timestamp default current_timestamp,status enum('Approved','pending','completed') default 'pendinng',foreign key(student_id) references students(id) on delete cascade,foreign key(course_id) references courses(id) on delete cascade);
+ERROR 1067 (42000): Invalid default value for 'status'
+MariaDB [course_management]> CREATE TABLE enrollments (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     student_id INT,
+    ->     course_id INT,
+    ->     enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ->     status ENUM('Approved', 'pending', 'completed') DEFAULT 'pending',
+    ->     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    ->     FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.065 sec)
+
+MariaDB [course_management]> desc enrollments;
++-------------+----------------------------------------+------+-----+---------------------+----------------+
+| Field       | Type                                   | Null | Key | Default             | Extra          |
++-------------+----------------------------------------+------+-----+---------------------+----------------+
+| id          | int(11)                                | NO   | PRI | NULL                | auto_increment |
+| student_id  | int(11)                                | YES  | MUL | NULL                |                |
+| course_id   | int(11)                                | YES  | MUL | NULL                |                |
+| enrolled_at | timestamp                              | NO   |     | current_timestamp() |                |
+| status      | enum('Approved','pending','completed') | YES  |     | pending             |                |
++-------------+----------------------------------------+------+-----+---------------------+----------------+
+5 rows in set (0.015 sec)
+
+MariaDB [course_management]> desc courses;
++---------------+---------------+------+-----+---------------------+-------+
+| Field         | Type          | Null | Key | Default             | Extra |
++---------------+---------------+------+-----+---------------------+-------+
+| id            | int(11)       | NO   | PRI | NULL                |       |
+| title         | varchar(30)   | NO   |     | NULL                |       |
+| description   | text          | NO   |     | NULL                |       |
+| category_id   | int(11)       | YES  | MUL | NULL                |       |
+| instructor_id | int(11)       | YES  | MUL | NULL                |       |
+| start_date    | date          | YES  |     | NULL                |       |
+| price         | decimal(10,2) | YES  |     | NULL                |       |
+| created_at    | timestamp     | NO   |     | current_timestamp() |       |
++---------------+---------------+------+-----+---------------------+-------+
+8 rows in set (0.012 sec)
+
+MariaDB [course_management]> desc categories;
++-------------+-------------+------+-----+---------------------+-------+
+| Field       | Type        | Null | Key | Default             | Extra |
++-------------+-------------+------+-----+---------------------+-------+
+| id          | int(11)     | NO   | PRI | NULL                |       |
+| name        | varchar(30) | NO   |     | NULL                |       |
+| description | text        | YES  |     | NULL                |       |
+| created_at  | timestamp   | NO   |     | current_timestamp() |       |
++-------------+-------------+------+-----+---------------------+-------+
+4 rows in set (0.009 sec)
+
+MariaDB [course_management]> INSERT INTO categories (id, name, description, created_at) VALUES
+    -> (1, 'Technology', 'Courses related to software, hardware, and IT.', CURRENT_TIMESTAMP),
+    -> (2, 'Business', 'Courses on management, entrepreneurship, and marketing.', CURRENT_TIMESTAMP),
+    -> (3, 'Art & Design', 'Courses focused on creativity, painting, and graphic design.', CURRENT_TIMESTAMP),
+    -> (4, 'Health & Fitness', 'Courses about physical health, nutrition, and wellness.', CURRENT_TIMESTAMP),
+    -> (5, 'Language', 'Courses for learning new languages and linguistics.', CURRENT_TIMESTAMP);
+Query OK, 5 rows affected (0.007 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> select * categories;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'categories' at line 1
+MariaDB [course_management]> select * from categories;
++----+------------------+--------------------------------------------------------------+---------------------+
+| id | name             | description                                                  | created_at          |
++----+------------------+--------------------------------------------------------------+---------------------+
+|  1 | Technology       | Courses related to software, hardware, and IT.               | 2025-07-27 16:53:18 |
+|  2 | Business         | Courses on management, entrepreneurship, and marketing.      | 2025-07-27 16:53:18 |
+|  3 | Art & Design     | Courses focused on creativity, painting, and graphic design. | 2025-07-27 16:53:18 |
+|  4 | Health & Fitness | Courses about physical health, nutrition, and wellness.      | 2025-07-27 16:53:18 |
+|  5 | Language         | Courses for learning new languages and linguistics.          | 2025-07-27 16:53:18 |
++----+------------------+--------------------------------------------------------------+---------------------+
+5 rows in set (0.000 sec)
+
+MariaDB [course_management]> desc instructor;
++------------+-------------+------+-----+---------------------+----------------+
+| Field      | Type        | Null | Key | Default             | Extra          |
++------------+-------------+------+-----+---------------------+----------------+
+| id         | int(11)     | NO   | PRI | NULL                | auto_increment |
+| name       | varchar(30) | YES  |     | NULL                |                |
+| email      | varchar(50) | YES  |     | NULL                |                |
+| phone      | varchar(12) | YES  |     | NULL                |                |
+| bio        | text        | YES  |     | NULL                |                |
+| photo      | varchar(20) | YES  |     | NULL                |                |
+| created_at | timestamp   | NO   |     | current_timestamp() |                |
++------------+-------------+------+-----+---------------------+----------------+
+7 rows in set (0.012 sec)
+
+MariaDB [course_management]> INSERT INTO instructor (name, email, phone, bio, photo, created_at) VALUES
+    -> ('John Smith', 'john.smith@example.com', '01234567890', 'Expert in Python and Data Science with 10+ years of teaching experience.', 'john.jpg', CURRENT_TIMESTAMP),
+    -> ('Sarah Johnson', 'sarah.j@example.com', '01712345678', 'Marketing professional specializing in digital campaigns and SEO.', 'sarah.jpg', CURRENT_TIMESTAMP),
+    -> ('David Lee', 'david.lee@example.com', '01898765432', 'Graphic designer and Adobe Certified Trainer.', 'david.jpg', CURRENT_TIMESTAMP),
+    -> ('Emma Watson', 'emma.w@example.com', '01911122334', 'Certified yoga instructor with a passion for holistic wellness.', 'emma.jpg', CURRENT_TIMESTAMP),
+    -> ('Carlos Ruiz', 'carlos.r@example.com', '01655443322', 'Language expert fluent in Spanish and French, teaching for 8 years.', 'carlos.jpg', CURRENT_TIMESTAMP);
+Query OK, 5 rows affected (0.100 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> select * from instructor;
++----+---------------+------------------------+-------------+--------------------------------------------------------------------------+------------+---------------------+
+| id | name          | email                  | phone       | bio                                                                      | photo      | created_at          |
++----+---------------+------------------------+-------------+--------------------------------------------------------------------------+------------+---------------------+
+|  1 | John Smith    | john.smith@example.com | 01234567890 | Expert in Python and Data Science with 10+ years of teaching experience. | john.jpg   | 2025-07-27 17:01:10 |
+|  2 | Sarah Johnson | sarah.j@example.com    | 01712345678 | Marketing professional specializing in digital campaigns and SEO.        | sarah.jpg  | 2025-07-27 17:01:10 |
+|  3 | David Lee     | david.lee@example.com  | 01898765432 | Graphic designer and Adobe Certified Trainer.                            | david.jpg  | 2025-07-27 17:01:10 |
+|  4 | Emma Watson   | emma.w@example.com     | 01911122334 | Certified yoga instructor with a passion for holistic wellness.          | emma.jpg   | 2025-07-27 17:01:10 |
+|  5 | Carlos Ruiz   | carlos.r@example.com   | 01655443322 | Language expert fluent in Spanish and French, teaching for 8 years.      | carlos.jpg | 2025-07-27 17:01:10 |
++----+---------------+------------------------+-------------+--------------------------------------------------------------------------+------------+---------------------+
+5 rows in set (0.000 sec)
+
+MariaDB [course_management]> desc courses;
++---------------+---------------+------+-----+---------------------+-------+
+| Field         | Type          | Null | Key | Default             | Extra |
++---------------+---------------+------+-----+---------------------+-------+
+| id            | int(11)       | NO   | PRI | NULL                |       |
+| title         | varchar(30)   | NO   |     | NULL                |       |
+| description   | text          | NO   |     | NULL                |       |
+| category_id   | int(11)       | YES  | MUL | NULL                |       |
+| instructor_id | int(11)       | YES  | MUL | NULL                |       |
+| start_date    | date          | YES  |     | NULL                |       |
+| price         | decimal(10,2) | YES  |     | NULL                |       |
+| created_at    | timestamp     | NO   |     | current_timestamp() |       |
++---------------+---------------+------+-----+---------------------+-------+
+8 rows in set (0.010 sec)
+
+MariaDB [course_management]> alter table corses modify id int(11) not null auto_increment;
+ERROR 1146 (42S02): Table 'course_management.corses' doesn't exist
+MariaDB [course_management]> ALTER TABLE courses MODIFY id INT(11) NOT NULL AUTO_INCREMENT;
+Query OK, 0 rows affected (0.178 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> INSERT INTO courses (id, title, description, category_id, instructor_id, start_date, price, created_at) VALUES
+    -> (1, 'Python Programming', 'Learn Python from scratch - from variables to OOP.', 1, 1, '2025-09-01', 99.99, CURRENT_TIMESTAMP),
+    -> (2, 'Digital Marketing Basics', 'Understand SEO, SEM, email, and social media marketing.', 2, 2, '2025-08-15', 149.99, CURRENT_TIMESTAMP),
+    -> (3, 'Graphic Design Mastery', 'Master Adobe Illustrator, Photoshop, and design principles.', 3, 3, '2025-10-10', 129.50, CURRENT_TIMESTAMP),
+    -> (4, 'Beginner Yoga Course', 'Start your yoga journey with foundational poses and mindfulness.', 4, 4, '2025-07-20', 59.00, CURRENT_TIMESTAMP),
+    -> (5, 'Spanish for Beginners', 'Learn to speak and understand basic conversational Spanish.', 5, 5, '2025-09-05', 79.99, CURRENT_TIMESTAMP);
+Query OK, 5 rows affected (0.018 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> select * from courses;
++----+--------------------------+------------------------------------------------------------------+-------------+---------------+------------+--------+---------------------+
+| id | title                    | description                                                      | category_id | instructor_id | start_date | price  | created_at          |
++----+--------------------------+------------------------------------------------------------------+-------------+---------------+------------+--------+---------------------+
+|  1 | Python Programming       | Learn Python from scratch - from variables to OOP.               |           1 |             1 | 2025-09-01 |  99.99 | 2025-07-27 18:07:54 |
+|  2 | Digital Marketing Basics | Understand SEO, SEM, email, and social media marketing.          |           2 |             2 | 2025-08-15 | 149.99 | 2025-07-27 18:07:54 |
+|  3 | Graphic Design Mastery   | Master Adobe Illustrator, Photoshop, and design principles.      |           3 |             3 | 2025-10-10 | 129.50 | 2025-07-27 18:07:54 |
+|  4 | Beginner Yoga Course     | Start your yoga journey with foundational poses and mindfulness. |           4 |             4 | 2025-07-20 |  59.00 | 2025-07-27 18:07:54 |
+|  5 | Spanish for Beginners    | Learn to speak and understand basic conversational Spanish.      |           5 |             5 | 2025-09-05 |  79.99 | 2025-07-27 18:07:54 |
++----+--------------------------+------------------------------------------------------------------+-------------+---------------+------------+--------+---------------------+
+5 rows in set (0.000 sec)
+
+MariaDB [course_management]> delete from courses;
+Query OK, 5 rows affected (0.010 sec)
+
+MariaDB [course_management]> desc courses;
++---------------+---------------+------+-----+---------------------+----------------+
+| Field         | Type          | Null | Key | Default             | Extra          |
++---------------+---------------+------+-----+---------------------+----------------+
+| id            | int(11)       | NO   | PRI | NULL                | auto_increment |
+| title         | varchar(30)   | NO   |     | NULL                |                |
+| description   | text          | NO   |     | NULL                |                |
+| category_id   | int(11)       | YES  | MUL | NULL                |                |
+| instructor_id | int(11)       | YES  | MUL | NULL                |                |
+| start_date    | date          | YES  |     | NULL                |                |
+| price         | decimal(10,2) | YES  |     | NULL                |                |
+| created_at    | timestamp     | NO   |     | current_timestamp() |                |
++---------------+---------------+------+-----+---------------------+----------------+
+8 rows in set (0.110 sec)
+
+MariaDB [course_management]>  INSERT INTO courses (id, title, description, category_id, instructor_id, start_date, price, created_at) VALUES
+    ->     -> (1, 'Python Programming', 'Learn Python from scratch - from variables to OOP.', 1, 1, '2025-09-01', 99.99, CURRENT_TIMESTAMP),
+    ->     -> (2, 'Digital Marketing Basics', 'Understand SEO, SEM, email, and social media marketing.', 2, 2, '2025-08-15', 149.99, CURRENT_TIMESTAMP),
+    ->     -> (3, 'Graphic Design Mastery', 'Master Adobe Illustrator, Photoshop, and design principles.', 3, 3, '2025-10-10', 129.50, CURRENT_TIMESTAMP),
+    ->     -> (4, 'Beginner Yoga Course', 'Start your yoga journey with foundational poses and mindfulness.', 4, 4, '2025-07-20', 59.00, CURRENT_TIMESTAMP),
+    -> \c;
+ERROR: No query specified
+
+MariaDB [course_management]> INSERT INTO courses (title, description, category_id, instructor_id, start_date, price, created_at) VALUES
+    -> ('Python Programming', 'Learn Python from scratch - from variables to OOP.', 1, 1, '2025-09-01', 99.99, CURRENT_TIMESTAMP),
+    -> ('Digital Marketing Basics', 'Understand SEO, SEM, email, and social media marketing.', 2, 2, '2025-08-15', 149.99, CURRENT_TIMESTAMP),
+    -> ('Graphic Design Mastery', 'Master Adobe Illustrator, Photoshop, and design principles.', 3, 3, '2025-10-10', 129.50, CURRENT_TIMESTAMP),
+    -> ('Beginner Yoga Course', 'Start your yoga journey with foundational poses and mindfulness.', 4, 4, '2025-07-20', 59.00, CURRENT_TIMESTAMP),
+    -> ('Spanish for Beginners', 'Learn to speak and understand basic conversational Spanish.', 5, 5, '2025-09-05', 79.99, CURRENT_TIMESTAMP),
+    -> ('Full Stack Web Dev', 'HTML, CSS, JS, React, and Node.js in one course.', 1, 1, '2025-09-15', 199.00, CURRENT_TIMESTAMP),
+    -> ('Entrepreneurship 101', 'Build and grow your own startup.', 2, 2, '2025-11-01', 89.99, CURRENT_TIMESTAMP),
+    -> ('Advanced Photoshop', 'Professional-level photo editing and retouching.', 3, 3, '2025-10-25', 149.50, CURRENT_TIMESTAMP),
+    -> ('Mindfulness Meditation', 'Improve mental clarity and reduce stress.', 4, 4, '2025-08-01', 49.00, CURRENT_TIMESTAMP),
+    -> ('French Language Basics', 'Learn everyday French for travel and conversation.', 5, 5, '2025-09-20', 84.99, CURRENT_TIMESTAMP);
+Query OK, 10 rows affected (0.065 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> select* from courses;
++----+--------------------------+------------------------------------------------------------------+-------------+---------------+------------+--------+---------------------+
+| id | title                    | description                                                      | category_id | instructor_id | start_date | price  | created_at          |
++----+--------------------------+------------------------------------------------------------------+-------------+---------------+------------+--------+---------------------+
+|  6 | Python Programming       | Learn Python from scratch - from variables to OOP.               |           1 |             1 | 2025-09-01 |  99.99 | 2025-07-27 18:12:45 |
+|  7 | Digital Marketing Basics | Understand SEO, SEM, email, and social media marketing.          |           2 |             2 | 2025-08-15 | 149.99 | 2025-07-27 18:12:45 |
+|  8 | Graphic Design Mastery   | Master Adobe Illustrator, Photoshop, and design principles.      |           3 |             3 | 2025-10-10 | 129.50 | 2025-07-27 18:12:45 |
+|  9 | Beginner Yoga Course     | Start your yoga journey with foundational poses and mindfulness. |           4 |             4 | 2025-07-20 |  59.00 | 2025-07-27 18:12:45 |
+| 10 | Spanish for Beginners    | Learn to speak and understand basic conversational Spanish.      |           5 |             5 | 2025-09-05 |  79.99 | 2025-07-27 18:12:45 |
+| 11 | Full Stack Web Dev       | HTML, CSS, JS, React, and Node.js in one course.                 |           1 |             1 | 2025-09-15 | 199.00 | 2025-07-27 18:12:45 |
+| 12 | Entrepreneurship 101     | Build and grow your own startup.                                 |           2 |             2 | 2025-11-01 |  89.99 | 2025-07-27 18:12:45 |
+| 13 | Advanced Photoshop       | Professional-level photo editing and retouching.                 |           3 |             3 | 2025-10-25 | 149.50 | 2025-07-27 18:12:45 |
+| 14 | Mindfulness Meditation   | Improve mental clarity and reduce stress.                        |           4 |             4 | 2025-08-01 |  49.00 | 2025-07-27 18:12:45 |
+| 15 | French Language Basics   | Learn everyday French for travel and conversation.               |           5 |             5 | 2025-09-20 |  84.99 | 2025-07-27 18:12:45 |
++----+--------------------------+------------------------------------------------------------------+-------------+---------------+------------+--------+---------------------+
+10 rows in set (0.000 sec)
+
+MariaDB [course_management]> ALTER TABLE courses AUTO_INCREMENT = 1;
+Query OK, 0 rows affected (0.054 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> select* from courses;
++----+--------------------------+------------------------------------------------------------------+-------------+---------------+------------+--------+---------------------+
+| id | title                    | description                                                      | category_id | instructor_id | start_date | price  | created_at          |
++----+--------------------------+------------------------------------------------------------------+-------------+---------------+------------+--------+---------------------+
+|  6 | Python Programming       | Learn Python from scratch - from variables to OOP.               |           1 |             1 | 2025-09-01 |  99.99 | 2025-07-27 18:12:45 |
+|  7 | Digital Marketing Basics | Understand SEO, SEM, email, and social media marketing.          |           2 |             2 | 2025-08-15 | 149.99 | 2025-07-27 18:12:45 |
+|  8 | Graphic Design Mastery   | Master Adobe Illustrator, Photoshop, and design principles.      |           3 |             3 | 2025-10-10 | 129.50 | 2025-07-27 18:12:45 |
+|  9 | Beginner Yoga Course     | Start your yoga journey with foundational poses and mindfulness. |           4 |             4 | 2025-07-20 |  59.00 | 2025-07-27 18:12:45 |
+| 10 | Spanish for Beginners    | Learn to speak and understand basic conversational Spanish.      |           5 |             5 | 2025-09-05 |  79.99 | 2025-07-27 18:12:45 |
+| 11 | Full Stack Web Dev       | HTML, CSS, JS, React, and Node.js in one course.                 |           1 |             1 | 2025-09-15 | 199.00 | 2025-07-27 18:12:45 |
+| 12 | Entrepreneurship 101     | Build and grow your own startup.                                 |           2 |             2 | 2025-11-01 |  89.99 | 2025-07-27 18:12:45 |
+| 13 | Advanced Photoshop       | Professional-level photo editing and retouching.                 |           3 |             3 | 2025-10-25 | 149.50 | 2025-07-27 18:12:45 |
+| 14 | Mindfulness Meditation   | Improve mental clarity and reduce stress.                        |           4 |             4 | 2025-08-01 |  49.00 | 2025-07-27 18:12:45 |
+| 15 | French Language Basics   | Learn everyday French for travel and conversation.               |           5 |             5 | 2025-09-20 |  84.99 | 2025-07-27 18:12:45 |
++----+--------------------------+------------------------------------------------------------------+-------------+---------------+------------+--------+---------------------+
+10 rows in set (0.000 sec)
+
+MariaDB [course_management]> DELETE FROM courses;
+Query OK, 10 rows affected (0.018 sec)
+
+MariaDB [course_management]> ALTER TABLE courses AUTO_INCREMENT = 1;
+Query OK, 0 rows affected (0.011 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> INSERT INTO courses (title, description, category_id, instructor_id, start_date, price, created_at) VALUES
+    -> ('Python Programming', 'Learn Python from scratch - from variables to OOP.', 1, 1, '2025-09-01', 99.99, CURRENT_TIMESTAMP),
+    -> ('Digital Marketing Basics', 'Understand SEO, SEM, email, and social media marketing.', 2, 2, '2025-08-15', 149.99, CURRENT_TIMESTAMP),
+    -> ('Graphic Design Mastery', 'Master Adobe Illustrator, Photoshop, and design principles.', 3, 3, '2025-10-10', 129.50, CURRENT_TIMESTAMP),
+    -> ('Beginner Yoga Course', 'Start your yoga journey with foundational poses and mindfulness.', 4, 4, '2025-07-20', 59.00, CURRENT_TIMESTAMP),
+    -> ('Spanish for Beginners', 'Learn to speak and understand basic conversational Spanish.', 5, 5, '2025-09-05', 79.99, CURRENT_TIMESTAMP),
+    -> ('Full Stack Web Dev', 'HTML, CSS, JS, React, and Node.js in one course.', 1, 1, '2025-09-15', 199.00, CURRENT_TIMESTAMP),
+    -> ('Entrepreneurship 101', 'Build and grow your own startup.', 2, 2, '2025-11-01', 89.99, CURRENT_TIMESTAMP),
+    -> ('Advanced Photoshop', 'Professional-level photo editing and retouching.', 3, 3, '2025-10-25', 149.50, CURRENT_TIMESTAMP),
+    -> ('Mindfulness Meditation', 'Improve mental clarity and reduce stress.', 4, 4, '2025-08-01', 49.00, CURRENT_TIMESTAMP),
+    -> ('French Language Basics', 'Learn everyday French for travel and conversation.', 5, 5, '2025-09-20', 84.99, CURRENT_TIMESTAMP);
+Query OK, 10 rows affected (0.019 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> select* from courses;
++----+--------------------------+------------------------------------------------------------------+-------------+---------------+------------+--------+---------------------+
+| id | title                    | description                                                      | category_id | instructor_id | start_date | price  | created_at          |
++----+--------------------------+------------------------------------------------------------------+-------------+---------------+------------+--------+---------------------+
+|  1 | Python Programming       | Learn Python from scratch - from variables to OOP.               |           1 |             1 | 2025-09-01 |  99.99 | 2025-07-27 18:18:06 |
+|  2 | Digital Marketing Basics | Understand SEO, SEM, email, and social media marketing.          |           2 |             2 | 2025-08-15 | 149.99 | 2025-07-27 18:18:06 |
+|  3 | Graphic Design Mastery   | Master Adobe Illustrator, Photoshop, and design principles.      |           3 |             3 | 2025-10-10 | 129.50 | 2025-07-27 18:18:06 |
+|  4 | Beginner Yoga Course     | Start your yoga journey with foundational poses and mindfulness. |           4 |             4 | 2025-07-20 |  59.00 | 2025-07-27 18:18:06 |
+|  5 | Spanish for Beginners    | Learn to speak and understand basic conversational Spanish.      |           5 |             5 | 2025-09-05 |  79.99 | 2025-07-27 18:18:06 |
+|  6 | Full Stack Web Dev       | HTML, CSS, JS, React, and Node.js in one course.                 |           1 |             1 | 2025-09-15 | 199.00 | 2025-07-27 18:18:06 |
+|  7 | Entrepreneurship 101     | Build and grow your own startup.                                 |           2 |             2 | 2025-11-01 |  89.99 | 2025-07-27 18:18:06 |
+|  8 | Advanced Photoshop       | Professional-level photo editing and retouching.                 |           3 |             3 | 2025-10-25 | 149.50 | 2025-07-27 18:18:06 |
+|  9 | Mindfulness Meditation   | Improve mental clarity and reduce stress.                        |           4 |             4 | 2025-08-01 |  49.00 | 2025-07-27 18:18:06 |
+| 10 | French Language Basics   | Learn everyday French for travel and conversation.               |           5 |             5 | 2025-09-20 |  84.99 | 2025-07-27 18:18:06 |
++----+--------------------------+------------------------------------------------------------------+-------------+---------------+------------+--------+---------------------+
+10 rows in set (0.000 sec)
+
+MariaDB [course_management]> INSERT INTO enrollments (student_id, course_id, enrolled_at, status) VALUES
+    -> (1, 1, CURRENT_TIMESTAMP, 'Approved'),
+    -> (2, 2, CURRENT_TIMESTAMP, 'pending'),
+    -> (3, 3, CURRENT_TIMESTAMP, 'completed'),
+    -> (4, 4, CURRENT_TIMESTAMP, 'Approved'),
+    -> (5, 5, CURRENT_TIMESTAMP, 'pending'),
+    -> (1, 6, CURRENT_TIMESTAMP, 'completed'),
+    -> (2, 7, CURRENT_TIMESTAMP, 'Approved'),
+    -> (3, 8, CURRENT_TIMESTAMP, 'pending'),
+    -> (4, 9, CURRENT_TIMESTAMP, 'Approved'),
+    -> (5, 10, CURRENT_TIMESTAMP, 'completed');
+Query OK, 10 rows affected (0.026 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> selsect * from enrollments;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'selsect * from enrollments' at line 1
+MariaDB [course_management]> select * from enrollments;
++----+------------+-----------+---------------------+-----------+
+| id | student_id | course_id | enrolled_at         | status    |
++----+------------+-----------+---------------------+-----------+
+|  1 |          1 |         1 | 2025-07-27 18:19:01 | Approved  |
+|  2 |          2 |         2 | 2025-07-27 18:19:01 | pending   |
+|  3 |          3 |         3 | 2025-07-27 18:19:01 | completed |
+|  4 |          4 |         4 | 2025-07-27 18:19:01 | Approved  |
+|  5 |          5 |         5 | 2025-07-27 18:19:01 | pending   |
+|  6 |          1 |         6 | 2025-07-27 18:19:01 | completed |
+|  7 |          2 |         7 | 2025-07-27 18:19:01 | Approved  |
+|  8 |          3 |         8 | 2025-07-27 18:19:01 | pending   |
+|  9 |          4 |         9 | 2025-07-27 18:19:01 | Approved  |
+| 10 |          5 |        10 | 2025-07-27 18:19:01 | completed |
++----+------------+-----------+---------------------+-----------+
+10 rows in set (0.000 sec)
+
+MariaDB [course_management]> INSERT INTO enrollments (student_id, course_id, enrolled_at, status) VALUES
+    -> (1, 1, CURRENT_TIMESTAMP, 'Approved'),      -- Re-enrolled or another record
+    -> (2, 1, CURRENT_TIMESTAMP, 'pending'),       -- Multiple students in course 1
+    -> (3, 2, CURRENT_TIMESTAMP, 'completed'),
+    -> (4, 2, CURRENT_TIMESTAMP, 'Approved'),      -- Multiple students in course 2
+    -> (5, 3, CURRENT_TIMESTAMP, 'pending'),
+    -> (1, 4, CURRENT_TIMESTAMP, 'Approved'),
+    -> (2, 5, CURRENT_TIMESTAMP, 'completed'),
+    -> (3, 5, CURRENT_TIMESTAMP, 'Approved'),      -- Multiple students in course 5
+    -> (4, 6, CURRENT_TIMESTAMP, 'pending'),
+    -> (5, 7, CURRENT_TIMESTAMP, 'Approved');
+Query OK, 10 rows affected (0.015 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> create table payments(id int auto_increment primary key,student_id int,course_id int,amount_decimal(10,2) not null,payment_method enum('bkash','rocket','card') not null,transection_id varchar(100) unique not null,payment_status enum('pending','complete','failed') default 'pending',created_at timestamp default current_timestamp,foreign key(student_id) references students(id) on delete cascade,foreign key(course_id) references courses(id) on delete cascade);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '(10,2) not null,payment_method enum('bkash','rocket','card') not null,transec...' at line 1
+MariaDB [course_management]> CREATE TABLE payments (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     student_id INT,
+    ->     course_id INT,
+    ->     amount DECIMAL(10,2) NOT NULL,
+    ->     payment_method ENUM('bkash', 'rocket', 'card') NOT NULL,
+    ->     transection_id VARCHAR(100) UNIQUE NOT NULL,
+    ->     payment_status ENUM('pending', 'complete', 'failed') DEFAULT 'pending',
+    ->     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ->     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    ->     FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.072 sec)
+
+MariaDB [course_management]> INSERT INTO payments (student_id, course_id, amount, payment_method, transection_id, payment_status, created_at) VALUES
+    -> (1, 1,  99.99, 'bkash',  'TXN101BX', 'complete', CURRENT_TIMESTAMP),
+    -> (2, 2, 149.99, 'rocket', 'TXN102RK', 'pending',  CURRENT_TIMESTAMP),
+    -> (3, 3, 129.50, 'card',   'TXN103CD', 'complete', CURRENT_TIMESTAMP),
+    -> (4, 4,  59.00, 'bkash',  'TXN104BX', 'failed',   CURRENT_TIMESTAMP),
+    -> (5, 5,  79.99, 'card',   'TXN105CD', 'complete', CURRENT_TIMESTAMP),
+    -> (6, 6, 199.00, 'rocket', 'TXN106RK', 'complete', CURRENT_TIMESTAMP),
+    -> (7, 7,  89.99, 'bkash',  'TXN107BX', 'pending',  CURRENT_TIMESTAMP),
+    -> (8, 8, 149.50, 'card',   'TXN108CD', 'complete', CURRENT_TIMESTAMP),
+    -> (9, 9,  49.00, 'rocket', 'TXN109RK', 'pending',  CURRENT_TIMESTAMP),
+    -> (10, 10, 84.99, 'bkash', 'TXN110BX', 'complete', CURRENT_TIMESTAMP),
+    -> (11, 1,  99.99, 'card',  'TXN111CD', 'complete', CURRENT_TIMESTAMP),
+    -> (12, 2, 149.99, 'bkash', 'TXN112BX', 'failed',   CURRENT_TIMESTAMP),
+    -> (13, 3, 129.50, 'rocket','TXN113RK', 'pending',  CURRENT_TIMESTAMP),
+    -> (14, 4,  59.00, 'card',  'TXN114CD', 'complete', CURRENT_TIMESTAMP);
+Query OK, 14 rows affected (0.023 sec)
+Records: 14  Duplicates: 0  Warnings: 0
+
+MariaDB [course_management]> select * from payments;
++----+------------+-----------+--------+----------------+----------------+----------------+---------------------+
+| id | student_id | course_id | amount | payment_method | transection_id | payment_status | created_at          |
++----+------------+-----------+--------+----------------+----------------+----------------+---------------------+
+|  1 |          1 |         1 |  99.99 | bkash          | TXN101BX       | complete       | 2025-07-27 18:30:17 |
+|  2 |          2 |         2 | 149.99 | rocket         | TXN102RK       | pending        | 2025-07-27 18:30:17 |
+|  3 |          3 |         3 | 129.50 | card           | TXN103CD       | complete       | 2025-07-27 18:30:17 |
+|  4 |          4 |         4 |  59.00 | bkash          | TXN104BX       | failed         | 2025-07-27 18:30:17 |
+|  5 |          5 |         5 |  79.99 | card           | TXN105CD       | complete       | 2025-07-27 18:30:17 |
+|  6 |          6 |         6 | 199.00 | rocket         | TXN106RK       | complete       | 2025-07-27 18:30:17 |
+|  7 |          7 |         7 |  89.99 | bkash          | TXN107BX       | pending        | 2025-07-27 18:30:17 |
+|  8 |          8 |         8 | 149.50 | card           | TXN108CD       | complete       | 2025-07-27 18:30:17 |
+|  9 |          9 |         9 |  49.00 | rocket         | TXN109RK       | pending        | 2025-07-27 18:30:17 |
+| 10 |         10 |        10 |  84.99 | bkash          | TXN110BX       | complete       | 2025-07-27 18:30:17 |
+| 11 |         11 |         1 |  99.99 | card           | TXN111CD       | complete       | 2025-07-27 18:30:17 |
+| 12 |         12 |         2 | 149.99 | bkash          | TXN112BX       | failed         | 2025-07-27 18:30:17 |
+| 13 |         13 |         3 | 129.50 | rocket         | TXN113RK       | pending        | 2025-07-27 18:30:17 |
+| 14 |         14 |         4 |  59.00 | card           | TXN114CD       | complete       | 2025-07-27 18:30:17 |
++----+------------+-----------+--------+----------------+----------------+----------------+---------------------+
+14 rows in set (0.000 sec)
+
+MariaDB [course_management]> notee;
